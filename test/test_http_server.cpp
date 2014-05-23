@@ -10,9 +10,11 @@
 #include <vector>
 #include <chrono>
 #include <sstream>
+#include <boost/asio/basic_waitable_timer.hpp>
 #include <fibio/fiber.hpp>
 #include <fibio/http/client/client.hpp>
 #include <fibio/http/server/server.hpp>
+#include <fibio/fiberize.hpp>
 
 using namespace fibio;
 using namespace fibio::http;
@@ -136,7 +138,9 @@ void the_server() {
     watchdog.join();
 }
 
-int main_fiber(int argc, char *argv[]) {
+int fibio::main(int argc, char *argv[]) {
+    scheduler::get_instance().add_worker_thread(3);
+
     should_exit=false;
     fiber_group fibers;
     fiber(the_server).detach();
@@ -149,8 +153,4 @@ int main_fiber(int argc, char *argv[]) {
     should_exit=true;
     std::cout << "main_fiber exiting" << std::endl;
     return 0;
-}
-
-int main(int argc, char *argv[]) {
-    return fiberize(4, main_fiber, argc, argv);
 }

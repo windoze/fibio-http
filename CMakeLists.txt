@@ -7,21 +7,20 @@ if(APPLE)
     set(CMAKE_LINK_FLAGS "${CMAKE_LINK_FLAGS} -stdlib=libc++")
 endif(APPLE)
 
-find_package(Threads REQUIRED)
-find_package(Boost 1.55.0 COMPONENTS system coroutine context iostreams REQUIRED)
+#find_package(Threads REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(fibio REQUIRED)
+find_package(Boost 1.55.0 COMPONENTS iostreams REQUIRED)
 
 INCLUDE_DIRECTORIES(
-    ${Boost_INCLUDE_DIRS}
+    ${FIBIO_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}/http-parser
-    ${CMAKE_SOURCE_DIR}/fibio/include
     ${CMAKE_SOURCE_DIR}/include
 )
 
-set(FIBIO_LIBS)
-list(APPEND FIBIO_LIBS fibio_http fibio ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+set(COMMON_LIBS)
+list(APPEND COMMON_LIBS fibio_http ${FIBIO_LIBRARIES} ${Boost_LIBRARIES})
 
-ADD_SUBDIRECTORY(fibio)
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(test)

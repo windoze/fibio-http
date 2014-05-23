@@ -11,6 +11,7 @@
 #include <sstream>
 #include <fibio/fiber.hpp>
 #include <fibio/http/client/client.hpp>
+#include <fibio/fiberize.hpp>
 
 using namespace fibio;
 using namespace fibio::http;
@@ -60,7 +61,7 @@ void the_client() {
     }
 }
 
-int main_fiber(int argc, char *argv[]) {
+int fibio::main(int argc, char *argv[]) {
     fiber_group fibers;
     for (int i=0; i<10; i++) {
         fibers.create_fiber(the_client);
@@ -68,8 +69,4 @@ int main_fiber(int argc, char *argv[]) {
     fibers.join_all();
     std::cout << "main_fiber exiting" << std::endl;
     return 0;
-}
-
-int main(int argc, char *argv[]) {
-    return fiberize(4, main_fiber, argc, argv);
 }
