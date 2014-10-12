@@ -303,8 +303,8 @@ namespace fibio { namespace http { namespace common {
 
             constexpr int buf_size=1024;
             char buf[buf_size];
-            int recved=0;
-            int nparsed=0;
+            std::streamsize recved=0;
+            std::streamsize nparsed=0;
             while (!is.eof()) {
                 // Read some data
                 recved = is.readsome(buf, buf_size);
@@ -317,7 +317,7 @@ namespace fibio { namespace http { namespace common {
                     // Parse error
                     if (nparsed>=0) {
                         // Move read pointer back to where parser consumed
-                        std::streamsize off=std::streamsize(nparsed);
+                        std::streamsize off=nparsed;
                         off-=recved;
                         is.seekg(off, std::ios_base::cur);
                     }
@@ -487,8 +487,8 @@ namespace fibio { namespace http { namespace common {
             
             constexpr int buf_size=1024;
             char buf[buf_size];
-            int recved=0;
-            int nparsed=0;
+            std::streamsize recved=0;
+            std::streamsize nparsed=0;
             while (!is.eof()) {
                 // Read some data
                 recved = is.readsome(buf, buf_size);
@@ -501,7 +501,7 @@ namespace fibio { namespace http { namespace common {
                     // Parse error
                     if (nparsed>=0) {
                         // Move read pointer back to where parser consumed
-                        std::streamsize off=std::streamsize(nparsed);
+                        std::streamsize off=nparsed;
                         off-=recved;
                         is.seekg(off, std::ios_base::cur);
                     }
@@ -533,7 +533,7 @@ namespace fibio { namespace http { namespace common {
         return parser.parse(is);
     }
     
-    bool request::write(std::ostream &os) {
+    bool request::write_header(std::ostream &os) {
         // Some validation
         if (method==http_method::INVALID) return false;
         if (url.empty()) return false;
@@ -581,7 +581,7 @@ namespace fibio { namespace http { namespace common {
         return parser.parse(is);
     }
     
-    bool response::write(std::ostream &os) {
+    bool response::write_header(std::ostream &os) {
         // Some validation
         if (status_code==http_status_code::INVALID) return false;
         //if (status_message.empty()) return false;

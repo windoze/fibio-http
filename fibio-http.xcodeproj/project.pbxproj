@@ -21,7 +21,6 @@
 		2DB19E5F18EB076E0034B8E9 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DB19E4618EB067D0034B8E9 /* common.cpp */; };
 		2DB19E6018EB076E0034B8E9 /* server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DB19E4718EB067D0034B8E9 /* server.cpp */; };
 		2DB19E8118EB0C280034B8E9 /* http_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 2DB19DE218EB05A00034B8E9 /* http_parser.c */; };
-		2DB19F5418EB11740034B8E9 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F4318EB115B0034B8E9 /* libfibio.dylib */; };
 		2DB19F5618EB12EF0034B8E9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5518EB12EF0034B8E9 /* libz.dylib */; };
 		2DB19F5A18EB13010034B8E9 /* libboost_context-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5718EB13010034B8E9 /* libboost_context-mt.a */; };
 		2DB19F5B18EB13010034B8E9 /* libboost_coroutine-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */; };
@@ -33,79 +32,94 @@
 		2DB19F6F18EB13B50034B8E9 /* libboost_coroutine-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */; };
 		2DB19F7018EB13B50034B8E9 /* libboost_iostreams-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */; };
 		2DB19F7118EB13B50034B8E9 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5918EB13010034B8E9 /* libboost_system-mt.a */; };
-		2DB19F7218EB13BD0034B8E9 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F4318EB115B0034B8E9 /* libfibio.dylib */; };
 		2DB19F8018EB13F40034B8E9 /* test_http_server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DB19E4918EB07350034B8E9 /* test_http_server.cpp */; };
 		2DB19F8118EB14050034B8E9 /* libfibio_http.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19E5018EB07600034B8E9 /* libfibio_http.dylib */; };
-		2DB19F8218EB14050034B8E9 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F4318EB115B0034B8E9 /* libfibio.dylib */; };
 		2DB19F8318EB14150034B8E9 /* libboost_context-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5718EB13010034B8E9 /* libboost_context-mt.a */; };
 		2DB19F8418EB14150034B8E9 /* libboost_coroutine-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */; };
 		2DB19F8518EB14150034B8E9 /* libboost_iostreams-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */; };
 		2DB19F8618EB14150034B8E9 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5918EB13010034B8E9 /* libboost_system-mt.a */; };
+		2DD8080419E90D1000670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
+		2DD8080519E90D3900670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
+		2DD8080619E90E1800670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2DB19F4218EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044BE19E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2D1319B618D0A2360086156F;
 			remoteInfo = fibio;
 		};
-		2DB19F4418EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044C019E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2DD5664518DA1B99002A259D;
 			remoteInfo = test_fibers;
 		};
-		2DB19F4618EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044C219E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2D1319A218D09B850086156F;
 			remoteInfo = test_mutex;
 		};
-		2DB19F4818EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044C419E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2D1319D518D0A9A60086156F;
 			remoteInfo = test_cv;
 		};
-		2DB19F4A18EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044C619E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2D1319E618D0B1860086156F;
 			remoteInfo = test_cq;
 		};
-		2DB19F4C18EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044C819E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2D1319F718D0B45A0086156F;
 			remoteInfo = test_tcp_stream;
 		};
-		2DB19F4E18EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044CA19E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2D15D08F18E6C83C00E64B99;
 			remoteInfo = test_future;
 		};
-		2DB19F5018EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044CC19E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2D5A307618E71C0900C5EB41;
 			remoteInfo = test_asio;
 		};
-		2DB19F5218EB115B0034B8E9 /* PBXContainerItemProxy */ = {
+		2DC044CE19E94C630086C7A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 2DD5665A18DB35C3002A259D;
 			remoteInfo = echo_server;
+		};
+		2DC044D019E94C630086C7A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D82CD5A19CFF69500B0257D;
+			remoteInfo = test_ssl_stream;
+		};
+		2DC044D219E94C630086C7A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D82CD6E19CFF77900B0257D;
+			remoteInfo = test_fss;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -167,73 +181,16 @@
 		2DB19E7E18EB092C0034B8E9 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		2DB19E7F18EB0A0B0034B8E9 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		2DB19E8018EB0A1D0034B8E9 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		2DB19EEF18EB115B0034B8E9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		2DB19EF018EB115B0034B8E9 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = fibio.xcodeproj; sourceTree = "<group>"; };
-		2DB19EF618EB115B0034B8E9 /* asio.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = asio.hpp; sourceTree = "<group>"; };
-		2DB19EF818EB115B0034B8E9 /* concurrent_queue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = concurrent_queue.hpp; sourceTree = "<group>"; };
-		2DB19EF918EB115B0034B8E9 /* fiber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fiber.hpp; sourceTree = "<group>"; };
-		2DB19EFD18EB115B0034B8E9 /* use_future.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = use_future.hpp; sourceTree = "<group>"; };
-		2DB19EFE18EB115B0034B8E9 /* yield.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = yield.hpp; sourceTree = "<group>"; };
-		2DB19EFF18EB115B0034B8E9 /* use_future.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = use_future.hpp; sourceTree = "<group>"; };
-		2DB19F0018EB115B0034B8E9 /* yield.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = yield.hpp; sourceTree = "<group>"; };
-		2DB19F0118EB115B0034B8E9 /* barrier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = barrier.hpp; sourceTree = "<group>"; };
-		2DB19F0218EB115B0034B8E9 /* condition_variable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = condition_variable.hpp; sourceTree = "<group>"; };
-		2DB19F0418EB115B0034B8E9 /* fiber_base.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fiber_base.hpp; sourceTree = "<group>"; };
-		2DB19F0518EB115B0034B8E9 /* forward.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = forward.hpp; sourceTree = "<group>"; };
-		2DB19F0618EB115B0034B8E9 /* make_tuple_indices.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = make_tuple_indices.hpp; sourceTree = "<group>"; };
-		2DB19F0718EB115B0034B8E9 /* exceptions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = exceptions.hpp; sourceTree = "<group>"; };
-		2DB19F0818EB115B0034B8E9 /* fiber.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fiber.hpp; sourceTree = "<group>"; };
-		2DB19F0918EB115B0034B8E9 /* fiber_group.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fiber_group.hpp; sourceTree = "<group>"; };
-		2DB19F0A18EB115B0034B8E9 /* fiberize.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fiberize.hpp; sourceTree = "<group>"; };
-		2DB19F0B18EB115B0034B8E9 /* fss.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fss.hpp; sourceTree = "<group>"; };
-		2DB19F0D18EB115B0034B8E9 /* async.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = async.hpp; sourceTree = "<group>"; };
-		2DB19F0F18EB115B0034B8E9 /* shared_state.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shared_state.hpp; sourceTree = "<group>"; };
-		2DB19F1018EB115B0034B8E9 /* shared_state_object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shared_state_object.hpp; sourceTree = "<group>"; };
-		2DB19F1118EB115B0034B8E9 /* task_base.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = task_base.hpp; sourceTree = "<group>"; };
-		2DB19F1218EB115B0034B8E9 /* task_object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = task_object.hpp; sourceTree = "<group>"; };
-		2DB19F1318EB115B0034B8E9 /* future.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = future.hpp; sourceTree = "<group>"; };
-		2DB19F1418EB115B0034B8E9 /* future_status.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = future_status.hpp; sourceTree = "<group>"; };
-		2DB19F1518EB115B0034B8E9 /* packaged_task.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = packaged_task.hpp; sourceTree = "<group>"; };
-		2DB19F1618EB115B0034B8E9 /* promise.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = promise.hpp; sourceTree = "<group>"; };
-		2DB19F1718EB115B0034B8E9 /* mutex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mutex.hpp; sourceTree = "<group>"; };
-		2DB19F1818EB115B0034B8E9 /* shared_mutex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shared_mutex.hpp; sourceTree = "<group>"; };
-		2DB19F1918EB115B0034B8E9 /* future.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = future.hpp; sourceTree = "<group>"; };
-		2DB19F1A18EB115B0034B8E9 /* iostream.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = iostream.hpp; sourceTree = "<group>"; };
-		2DB19F1C18EB115B0034B8E9 /* iostream.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = iostream.hpp; sourceTree = "<group>"; };
-		2DB19F1D18EB115B0034B8E9 /* ssl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ssl.hpp; sourceTree = "<group>"; };
-		2DB19F1E18EB115B0034B8E9 /* streambuf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = streambuf.hpp; sourceTree = "<group>"; };
-		2DB19F1F18EB115B0034B8E9 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		2DB19F2018EB115B0034B8E9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		2DB19F2218EB115B0034B8E9 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		2DB19F2418EB115B0034B8E9 /* cv_object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cv_object.cpp; sourceTree = "<group>"; };
-		2DB19F2518EB115B0034B8E9 /* cv_object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cv_object.hpp; sourceTree = "<group>"; };
-		2DB19F2618EB115B0034B8E9 /* fiber_object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fiber_object.cpp; sourceTree = "<group>"; };
-		2DB19F2718EB115B0034B8E9 /* fiber_object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fiber_object.hpp; sourceTree = "<group>"; };
-		2DB19F2818EB115B0034B8E9 /* fiberize.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fiberize.cpp; sourceTree = "<group>"; };
-		2DB19F2918EB115B0034B8E9 /* future.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = future.cpp; sourceTree = "<group>"; };
-		2DB19F2A18EB115B0034B8E9 /* mutex_object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mutex_object.cpp; sourceTree = "<group>"; };
-		2DB19F2B18EB115B0034B8E9 /* mutex_object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mutex_object.hpp; sourceTree = "<group>"; };
-		2DB19F2C18EB115B0034B8E9 /* scheduler_object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scheduler_object.cpp; sourceTree = "<group>"; };
-		2DB19F2D18EB115B0034B8E9 /* scheduler_object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scheduler_object.hpp; sourceTree = "<group>"; };
-		2DB19F2F18EB115B0034B8E9 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		2DB19F3018EB115B0034B8E9 /* echo_server.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = echo_server.cpp; sourceTree = "<group>"; };
-		2DB19F3118EB115B0034B8E9 /* test_asio.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_asio.cpp; sourceTree = "<group>"; };
-		2DB19F3218EB115B0034B8E9 /* test_cq.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_cq.cpp; sourceTree = "<group>"; };
-		2DB19F3318EB115B0034B8E9 /* test_cv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_cv.cpp; sourceTree = "<group>"; };
-		2DB19F3418EB115B0034B8E9 /* test_fibers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_fibers.cpp; sourceTree = "<group>"; };
-		2DB19F3518EB115B0034B8E9 /* test_future.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_future.cpp; sourceTree = "<group>"; };
-		2DB19F3618EB115B0034B8E9 /* test_mutex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_mutex.cpp; sourceTree = "<group>"; };
-		2DB19F3718EB115B0034B8E9 /* test_tcp_stream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_tcp_stream.cpp; sourceTree = "<group>"; };
-		2DB19F3818EB115B0034B8E9 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO.md; sourceTree = "<group>"; };
+		2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fibio.xcodeproj; path = fibio/fibio.xcodeproj; sourceTree = "<group>"; };
 		2DB19F5518EB12EF0034B8E9 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		2DB19F5718EB13010034B8E9 /* libboost_context-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_context-mt.a"; path = "../../../../usr/local/Cellar/boost/1.55.0_1/lib/libboost_context-mt.a"; sourceTree = "<group>"; };
-		2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_coroutine-mt.a"; path = "../../../../usr/local/Cellar/boost/1.55.0_1/lib/libboost_coroutine-mt.a"; sourceTree = "<group>"; };
-		2DB19F5918EB13010034B8E9 /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "../../../../usr/local/Cellar/boost/1.55.0_1/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
-		2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_iostreams-mt.a"; path = "../../../../usr/local/Cellar/boost/1.55.0_1/lib/libboost_iostreams-mt.a"; sourceTree = "<group>"; };
+		2DB19F5718EB13010034B8E9 /* libboost_context-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_context-mt.a"; path = "/usr/local/lib/libboost_context-mt.a"; sourceTree = "<group>"; };
+		2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_coroutine-mt.a"; path = "/usr/local/lib/libboost_coroutine-mt.a"; sourceTree = "<group>"; };
+		2DB19F5918EB13010034B8E9 /* libboost_system-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-mt.a"; path = "/usr/local/lib/libboost_system-mt.a"; sourceTree = "<group>"; };
+		2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_iostreams-mt.a"; path = "/usr/local/lib/libboost_iostreams-mt.a"; sourceTree = "<group>"; };
 		2DB19F6318EB13710034B8E9 /* test_http_client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_http_client; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB19F7718EB13EC0034B8E9 /* test_http_server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_http_server; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB19F9118EB15840034B8E9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		2DD8080319E90D1000670721 /* libfibio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfibio.dylib; path = "../../Library/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug/libfibio.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,12 +198,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DD8080619E90E1800670721 /* libfibio.dylib in Frameworks */,
 				2DB19F5E18EB13120034B8E9 /* libboost_iostreams-mt.a in Frameworks */,
 				2DB19F5A18EB13010034B8E9 /* libboost_context-mt.a in Frameworks */,
 				2DB19F5B18EB13010034B8E9 /* libboost_coroutine-mt.a in Frameworks */,
 				2DB19F5C18EB13010034B8E9 /* libboost_system-mt.a in Frameworks */,
 				2DB19F5618EB12EF0034B8E9 /* libz.dylib in Frameworks */,
-				2DB19F5418EB11740034B8E9 /* libfibio.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,8 +215,8 @@
 				2DB19F6F18EB13B50034B8E9 /* libboost_coroutine-mt.a in Frameworks */,
 				2DB19F7018EB13B50034B8E9 /* libboost_iostreams-mt.a in Frameworks */,
 				2DB19F7118EB13B50034B8E9 /* libboost_system-mt.a in Frameworks */,
+				2DD8080519E90D3900670721 /* libfibio.dylib in Frameworks */,
 				2DB19F6D18EB13A30034B8E9 /* libfibio_http.dylib in Frameworks */,
-				2DB19F7218EB13BD0034B8E9 /* libfibio.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,8 +228,8 @@
 				2DB19F8418EB14150034B8E9 /* libboost_coroutine-mt.a in Frameworks */,
 				2DB19F8518EB14150034B8E9 /* libboost_iostreams-mt.a in Frameworks */,
 				2DB19F8618EB14150034B8E9 /* libboost_system-mt.a in Frameworks */,
+				2DD8080419E90D1000670721 /* libfibio.dylib in Frameworks */,
 				2DB19F8118EB14050034B8E9 /* libfibio_http.dylib in Frameworks */,
-				2DB19F8218EB14050034B8E9 /* libfibio.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +239,7 @@
 		2DB19D6318EB04C40034B8E9 = {
 			isa = PBXGroup;
 			children = (
+				2DD8080319E90D1000670721 /* libfibio.dylib */,
 				2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */,
 				2DB19F5718EB13010034B8E9 /* libboost_context-mt.a */,
 				2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */,
@@ -292,7 +250,7 @@
 				2DB19E7E18EB092C0034B8E9 /* LICENSE */,
 				2DB19E7D18EB090B0034B8E9 /* TODO.md */,
 				2DB19E7C18EB08C90034B8E9 /* CMakeLists.txt */,
-				2DB19EEE18EB115B0034B8E9 /* fibio */,
+				2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */,
 				2DB19DD918EB05A00034B8E9 /* http-parser */,
 				2DB19E2518EB05BC0034B8E9 /* include */,
 				2DB19E2618EB05BC0034B8E9 /* src */,
@@ -426,190 +384,22 @@
 			path = http;
 			sourceTree = "<group>";
 		};
-		2DB19EEE18EB115B0034B8E9 /* fibio */ = {
+		2DC044B119E94C610086C7A6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2DB19EEF18EB115B0034B8E9 /* .gitignore */,
-				2DB19EF018EB115B0034B8E9 /* CMakeLists.txt */,
-				2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */,
-				2DB19EF418EB115B0034B8E9 /* include */,
-				2DB19F1F18EB115B0034B8E9 /* LICENSE */,
-				2DB19F2018EB115B0034B8E9 /* README.md */,
-				2DB19F2118EB115B0034B8E9 /* src */,
-				2DB19F2E18EB115B0034B8E9 /* test */,
-				2DB19F3818EB115B0034B8E9 /* TODO.md */,
-			);
-			path = fibio;
-			sourceTree = "<group>";
-		};
-		2DB19EF218EB115B0034B8E9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F4318EB115B0034B8E9 /* libfibio.dylib */,
-				2DB19F4518EB115B0034B8E9 /* test_fibers */,
-				2DB19F4718EB115B0034B8E9 /* test_mutex */,
-				2DB19F4918EB115B0034B8E9 /* test_cv */,
-				2DB19F4B18EB115B0034B8E9 /* test_cq */,
-				2DB19F4D18EB115B0034B8E9 /* test_tcp_stream */,
-				2DB19F4F18EB115B0034B8E9 /* test_future */,
-				2DB19F5118EB115B0034B8E9 /* test_asio */,
-				2DB19F5318EB115B0034B8E9 /* echo_server */,
+				2DC044BF19E94C630086C7A6 /* libfibio.dylib */,
+				2DC044C119E94C630086C7A6 /* test_fibers */,
+				2DC044C319E94C630086C7A6 /* test_mutex */,
+				2DC044C519E94C630086C7A6 /* test_cv */,
+				2DC044C719E94C630086C7A6 /* test_cq */,
+				2DC044C919E94C630086C7A6 /* test_tcp_stream */,
+				2DC044CB19E94C630086C7A6 /* test_future */,
+				2DC044CD19E94C630086C7A6 /* test_asio */,
+				2DC044CF19E94C630086C7A6 /* echo_server */,
+				2DC044D119E94C630086C7A6 /* test_ssl_stream */,
+				2DC044D319E94C630086C7A6 /* test_fss */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		2DB19EF418EB115B0034B8E9 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19EF518EB115B0034B8E9 /* fibio */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		2DB19EF518EB115B0034B8E9 /* fibio */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19EF618EB115B0034B8E9 /* asio.hpp */,
-				2DB19EF718EB115B0034B8E9 /* concurrent */,
-				2DB19EF918EB115B0034B8E9 /* fiber.hpp */,
-				2DB19EFA18EB115B0034B8E9 /* fibers */,
-				2DB19F1918EB115B0034B8E9 /* future.hpp */,
-				2DB19F1A18EB115B0034B8E9 /* iostream.hpp */,
-				2DB19F1B18EB115B0034B8E9 /* stream */,
-			);
-			path = fibio;
-			sourceTree = "<group>";
-		};
-		2DB19EF718EB115B0034B8E9 /* concurrent */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19EF818EB115B0034B8E9 /* concurrent_queue.hpp */,
-			);
-			path = concurrent;
-			sourceTree = "<group>";
-		};
-		2DB19EFA18EB115B0034B8E9 /* fibers */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19EFB18EB115B0034B8E9 /* asio */,
-				2DB19F0118EB115B0034B8E9 /* barrier.hpp */,
-				2DB19F0218EB115B0034B8E9 /* condition_variable.hpp */,
-				2DB19F0318EB115B0034B8E9 /* detail */,
-				2DB19F0718EB115B0034B8E9 /* exceptions.hpp */,
-				2DB19F0818EB115B0034B8E9 /* fiber.hpp */,
-				2DB19F0918EB115B0034B8E9 /* fiber_group.hpp */,
-				2DB19F0A18EB115B0034B8E9 /* fiberize.hpp */,
-				2DB19F0B18EB115B0034B8E9 /* fss.hpp */,
-				2DB19F0C18EB115B0034B8E9 /* future */,
-				2DB19F1718EB115B0034B8E9 /* mutex.hpp */,
-				2DB19F1818EB115B0034B8E9 /* shared_mutex.hpp */,
-			);
-			path = fibers;
-			sourceTree = "<group>";
-		};
-		2DB19EFB18EB115B0034B8E9 /* asio */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19EFC18EB115B0034B8E9 /* detail */,
-				2DB19EFF18EB115B0034B8E9 /* use_future.hpp */,
-				2DB19F0018EB115B0034B8E9 /* yield.hpp */,
-			);
-			path = asio;
-			sourceTree = "<group>";
-		};
-		2DB19EFC18EB115B0034B8E9 /* detail */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19EFD18EB115B0034B8E9 /* use_future.hpp */,
-				2DB19EFE18EB115B0034B8E9 /* yield.hpp */,
-			);
-			path = detail;
-			sourceTree = "<group>";
-		};
-		2DB19F0318EB115B0034B8E9 /* detail */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F0418EB115B0034B8E9 /* fiber_base.hpp */,
-				2DB19F0518EB115B0034B8E9 /* forward.hpp */,
-				2DB19F0618EB115B0034B8E9 /* make_tuple_indices.hpp */,
-			);
-			path = detail;
-			sourceTree = "<group>";
-		};
-		2DB19F0C18EB115B0034B8E9 /* future */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F0D18EB115B0034B8E9 /* async.hpp */,
-				2DB19F0E18EB115B0034B8E9 /* detail */,
-				2DB19F1318EB115B0034B8E9 /* future.hpp */,
-				2DB19F1418EB115B0034B8E9 /* future_status.hpp */,
-				2DB19F1518EB115B0034B8E9 /* packaged_task.hpp */,
-				2DB19F1618EB115B0034B8E9 /* promise.hpp */,
-			);
-			path = future;
-			sourceTree = "<group>";
-		};
-		2DB19F0E18EB115B0034B8E9 /* detail */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F0F18EB115B0034B8E9 /* shared_state.hpp */,
-				2DB19F1018EB115B0034B8E9 /* shared_state_object.hpp */,
-				2DB19F1118EB115B0034B8E9 /* task_base.hpp */,
-				2DB19F1218EB115B0034B8E9 /* task_object.hpp */,
-			);
-			path = detail;
-			sourceTree = "<group>";
-		};
-		2DB19F1B18EB115B0034B8E9 /* stream */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F1C18EB115B0034B8E9 /* iostream.hpp */,
-				2DB19F1D18EB115B0034B8E9 /* ssl.hpp */,
-				2DB19F1E18EB115B0034B8E9 /* streambuf.hpp */,
-			);
-			path = stream;
-			sourceTree = "<group>";
-		};
-		2DB19F2118EB115B0034B8E9 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F2218EB115B0034B8E9 /* CMakeLists.txt */,
-				2DB19F2318EB115B0034B8E9 /* fiber */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
-		2DB19F2318EB115B0034B8E9 /* fiber */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F2418EB115B0034B8E9 /* cv_object.cpp */,
-				2DB19F2518EB115B0034B8E9 /* cv_object.hpp */,
-				2DB19F2618EB115B0034B8E9 /* fiber_object.cpp */,
-				2DB19F2718EB115B0034B8E9 /* fiber_object.hpp */,
-				2DB19F2818EB115B0034B8E9 /* fiberize.cpp */,
-				2DB19F2918EB115B0034B8E9 /* future.cpp */,
-				2DB19F2A18EB115B0034B8E9 /* mutex_object.cpp */,
-				2DB19F2B18EB115B0034B8E9 /* mutex_object.hpp */,
-				2DB19F2C18EB115B0034B8E9 /* scheduler_object.cpp */,
-				2DB19F2D18EB115B0034B8E9 /* scheduler_object.hpp */,
-			);
-			path = fiber;
-			sourceTree = "<group>";
-		};
-		2DB19F2E18EB115B0034B8E9 /* test */ = {
-			isa = PBXGroup;
-			children = (
-				2DB19F2F18EB115B0034B8E9 /* CMakeLists.txt */,
-				2DB19F3018EB115B0034B8E9 /* echo_server.cpp */,
-				2DB19F3118EB115B0034B8E9 /* test_asio.cpp */,
-				2DB19F3218EB115B0034B8E9 /* test_cq.cpp */,
-				2DB19F3318EB115B0034B8E9 /* test_cv.cpp */,
-				2DB19F3418EB115B0034B8E9 /* test_fibers.cpp */,
-				2DB19F3518EB115B0034B8E9 /* test_future.cpp */,
-				2DB19F3618EB115B0034B8E9 /* test_mutex.cpp */,
-				2DB19F3718EB115B0034B8E9 /* test_tcp_stream.cpp */,
-			);
-			path = test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -707,7 +497,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 2DB19EF218EB115B0034B8E9 /* Products */;
+					ProductGroup = 2DC044B119E94C610086C7A6 /* Products */;
 					ProjectRef = 2DB19EF118EB115B0034B8E9 /* fibio.xcodeproj */;
 				},
 			);
@@ -721,67 +511,81 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2DB19F4318EB115B0034B8E9 /* libfibio.dylib */ = {
+		2DC044BF19E94C630086C7A6 /* libfibio.dylib */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.dylib";
 			path = libfibio.dylib;
-			remoteRef = 2DB19F4218EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044BE19E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F4518EB115B0034B8E9 /* test_fibers */ = {
+		2DC044C119E94C630086C7A6 /* test_fibers */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = test_fibers;
-			remoteRef = 2DB19F4418EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044C019E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F4718EB115B0034B8E9 /* test_mutex */ = {
+		2DC044C319E94C630086C7A6 /* test_mutex */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = test_mutex;
-			remoteRef = 2DB19F4618EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044C219E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F4918EB115B0034B8E9 /* test_cv */ = {
+		2DC044C519E94C630086C7A6 /* test_cv */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = test_cv;
-			remoteRef = 2DB19F4818EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044C419E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F4B18EB115B0034B8E9 /* test_cq */ = {
+		2DC044C719E94C630086C7A6 /* test_cq */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = test_cq;
-			remoteRef = 2DB19F4A18EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044C619E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F4D18EB115B0034B8E9 /* test_tcp_stream */ = {
+		2DC044C919E94C630086C7A6 /* test_tcp_stream */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = test_tcp_stream;
-			remoteRef = 2DB19F4C18EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044C819E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F4F18EB115B0034B8E9 /* test_future */ = {
+		2DC044CB19E94C630086C7A6 /* test_future */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = test_future;
-			remoteRef = 2DB19F4E18EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044CA19E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F5118EB115B0034B8E9 /* test_asio */ = {
+		2DC044CD19E94C630086C7A6 /* test_asio */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = test_asio;
-			remoteRef = 2DB19F5018EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044CC19E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2DB19F5318EB115B0034B8E9 /* echo_server */ = {
+		2DC044CF19E94C630086C7A6 /* echo_server */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
 			path = echo_server;
-			remoteRef = 2DB19F5218EB115B0034B8E9 /* PBXContainerItemProxy */;
+			remoteRef = 2DC044CE19E94C630086C7A6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2DC044D119E94C630086C7A6 /* test_ssl_stream */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = test_ssl_stream;
+			remoteRef = 2DC044D019E94C630086C7A6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2DC044D319E94C630086C7A6 /* test_fss */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = test_fss;
+			remoteRef = 2DC044D219E94C630086C7A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -909,7 +713,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.55.0_1/lib,
+					/usr/local/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -921,7 +726,8 @@
 				EXECUTABLE_PREFIX = lib;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.55.0_1/lib,
+					/usr/local/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -936,7 +742,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.55.0_1/lib,
+					/usr/local/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -947,7 +754,8 @@
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.55.0_1/lib,
+					/usr/local/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -962,7 +770,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.55.0_1/lib,
+					/usr/local/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -973,7 +782,8 @@
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.55.0_1/lib,
+					/usr/local/lib,
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

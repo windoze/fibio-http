@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_common_response_hpp
-#define fiberized_io_http_common_response_hpp
+#ifndef fibio_http_common_response_hpp
+#define fibio_http_common_response_hpp
 
 #include <fibio/http/common/common_types.hpp>
 
@@ -16,7 +16,7 @@ namespace fibio { namespace http { namespace common {
         void clear();
         
         bool read(std::istream &is);
-        bool write(std::ostream &os);
+        bool write_header(std::ostream &os);
         
         http_version version=http_version::INVALID;
         http_status_code status_code=http_status_code::INVALID;

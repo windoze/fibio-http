@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_server_request_hpp
-#define fiberized_io_http_server_request_hpp
+#ifndef fibio_http_server_request_hpp
+#define fibio_http_server_request_hpp
 
 #include <memory>
 #include <string>
 #include <boost/iostreams/restrict.hpp>
 #include <fibio/http/common/request.hpp>
 
-namespace fibio { namespace http { namespace server {
-    struct request : common::request {
+namespace fibio { namespace http {
+    struct server_request : common::request {
         void clear();
         
         bool accept_compressed() const;
@@ -38,10 +38,10 @@ namespace fibio { namespace http { namespace server {
         std::unique_ptr<std::istream> body_stream_;
     };
 
-    inline std::istream &operator>>(std::istream &is, request &v) {
+    inline std::istream &operator>>(std::istream &is, server_request &v) {
         v.read(is);
         return is;
     }
-}}} // End of namespace fibio::http::server
+}}  // End of namespace fibio::http
 
 #endif

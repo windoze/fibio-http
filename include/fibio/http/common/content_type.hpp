@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_common_content_type_hpp
-#define fiberized_io_http_common_content_type_hpp
+#ifndef fibio_http_common_content_type_hpp
+#define fibio_http_common_content_type_hpp
 
 namespace fibio { namespace http { namespace common {
     template<typename T>

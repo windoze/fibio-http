@@ -6,22 +6,22 @@
 //  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_server_response_hpp
-#define fiberized_io_http_server_response_hpp
+#ifndef fibio_http_server_response_hpp
+#define fibio_http_server_response_hpp
 
 #include <string>
 #include <boost/interprocess/streams/vectorstream.hpp>
 #include <fibio/http/common/response.hpp>
 
-namespace fibio { namespace http { namespace server {
-    struct response : common::response {
-        response()=default;
-        
-        response(const response &other)
+namespace fibio { namespace http {
+    struct server_response : common::response {
+        server_response()=default;
+
+        server_response(const server_response &other)
         : common::response(other)
         {}
-        
-        response &operator=(const response &other) {
+
+        server_response &operator=(const server_response &other) {
             common::response::operator=(other);
             return *this;
         }
@@ -42,10 +42,11 @@ namespace fibio { namespace http { namespace server {
             body_stream() << t;
         }
         
+        bool write_header(std::ostream &os);
         bool write(std::ostream &os);
         
         boost::interprocess::basic_ovectorstream<std::string> raw_body_stream_;
     };
-}}} // End of namespace fibio::http::server
+}}  // End of namespace fibio::http
 
 #endif

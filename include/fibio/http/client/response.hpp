@@ -3,19 +3,19 @@
 //  fibio
 //
 //  Created by Chen Xu on 14-3-11.
-//  Copyright (c) 2014年 0d0a.com. All rights reserved.
+//  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_client_response_hpp
-#define fiberized_io_http_client_response_hpp
+#ifndef fibio_http_client_response_hpp
+#define fibio_http_client_response_hpp
 
 #include <memory>
 #include <string>
 #include <boost/iostreams/restrict.hpp>
 #include <fibio/http/common/response.hpp>
 
-namespace fibio { namespace http { namespace client {
-    struct response : common::response {
+namespace fibio { namespace http {
+    struct client_response : common::response {
         void clear();
         
         bool read(std::istream &is);
@@ -41,12 +41,12 @@ namespace fibio { namespace http { namespace client {
         std::unique_ptr<std::istream> body_stream_;
     };
 
-    inline std::istream &operator>>(std::istream &is, response &v) {
+    inline std::istream &operator>>(std::istream &is, client_response &v) {
         v.read(is);
         return is;
     }
 
-}}} // End of namespace fibio::http::client
+}}  // End of namespace fibio::http
 
 
 #endif

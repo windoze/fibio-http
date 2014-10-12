@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_client_client_hpp
-#define fiberized_io_http_client_client_hpp
+#ifndef fibio_http_client_client_hpp
+#define fibio_http_client_client_hpp
 
 #include <string>
 #include <functional>
@@ -15,10 +15,10 @@
 #include <fibio/http/client/request.hpp>
 #include <fibio/http/client/response.hpp>
 
-namespace fibio { namespace http { namespace client {
+namespace fibio { namespace http {
     struct client {
-        typedef fibio::http::client::request request;
-        typedef fibio::http::client::response response;
+        typedef fibio::http::client_request request;
+        typedef fibio::http::client_response response;
         
         client()=default;
         client(const std::string &server, const std::string &port);
@@ -38,10 +38,6 @@ namespace fibio { namespace http { namespace client {
         stream::tcp_stream stream_;
         bool auto_decompress_=false;
     };
-}}} // End of namespace fibio::http::client
-
-namespace fibio { namespace http {
-    typedef client::client http_client;
 }}  // End of namespace fibio::http
 
 #endif

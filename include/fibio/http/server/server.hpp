@@ -3,54 +3,78 @@
 //  fibio
 //
 //  Created by Chen Xu on 14-3-13.
-//  Copyright (c) 2014年 0d0a.com. All rights reserved.
+//  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_server_server_hpp
-#define fiberized_io_http_server_server_hpp
+#ifndef fibio_http_server_server_hpp
+#define fibio_http_server_server_hpp
 
+#include <memory>
 #include <string>
 #include <functional>
+#include <chrono>
 #include <system_error>
 #include <fibio/stream/iostream.hpp>
 #include <fibio/http/server/request.hpp>
 #include <fibio/http/server/response.hpp>
 
-namespace fibio { namespace http { namespace server {
-    struct server {
-        typedef fibio::http::server::request request;
-        typedef fibio::http::server::response response;
-
-        struct connection {
-            typedef fibio::http::server::request request;
-            typedef fibio::http::server::response response;
-            
-            connection()=default;
-            connection(connection &&other)=default;
-            connection(const connection &)=delete;
-            
-            bool recv(request &req);
-            bool send(response &resp);
-            
-            bool is_open() const { return stream_.is_open(); }
-            void close();
-            
-            std::string host_;
-            stream::tcp_stream stream_;
-        };
-        
-        server(const std::string &addr, unsigned short port, const std::string &host);
-        server(unsigned short port, const std::string &host);
-        boost::system::error_code accept(connection &sc);
-        void close();
-        
-        std::string host_;
-        tcp_stream_acceptor acceptor_;
-    };
-}}} // End of namespace fibio::http::server
-
 namespace fibio { namespace http {
-    typedef server::server http_server;
+    namespace detail {
+        struct server_engine;
+    }
+    
+    constexpr unsigned DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION=100;
+    
+    struct server {
+        typedef std::chrono::steady_clock::duration timeout_type;
+        typedef fibio::http::server_request request;
+        typedef fibio::http::server_response response;
+        typedef stream::tcp_stream connection;
+        typedef std::function<bool(request &req,
+                                   response &resp,
+                                   connection &conn)> request_handler_type;
+        
+        struct settings {
+            settings(const std::string &a="0.0.0.0",
+                     unsigned short p=80,
+                     request_handler_type h=[](request &, response &, connection &)->bool{ return false; },
+                     timeout_type r=std::chrono::seconds(0),
+                     timeout_type w=std::chrono::seconds(0),
+                     unsigned m=DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION)
+            : address(a)
+            , port(p)
+            , default_request_handler(h)
+            , read_timeout(r)
+            , write_timeout(w)
+            , max_keep_alive(m)
+            {}
+                     
+            std::string address;
+            unsigned short port;
+            request_handler_type default_request_handler;
+            timeout_type read_timeout;
+            timeout_type write_timeout;
+            unsigned max_keep_alive;
+        };
+
+        server(settings s);
+        ~server();
+        void start();
+        void stop();
+        void join();
+        
+        void set_default_request_handler(request_handler_type &&handler);
+        void add_virtual_host(const std::string &vhost, request_handler_type &&handler);
+        void remove_virtual_host(const std::string &vhost);
+        void set_request_handler(const std::string &vhost, request_handler_type &&handler);
+        
+    private:
+        struct impl_deleter {
+            void operator()(detail::server_engine *p);
+        };
+        std::unique_ptr<detail::server_engine, impl_deleter> engine_;
+        std::unique_ptr<fiber> servant_;
+    };
 }}  // End of namespace fibio::http
 
 #endif

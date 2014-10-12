@@ -3,19 +3,19 @@
 //  fibio
 //
 //  Created by Chen Xu on 14-3-10.
-//  Copyright (c) 2014年 0d0a.com. All rights reserved.
+//  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_client_request_hpp
-#define fiberized_io_http_client_request_hpp
+#ifndef fibio_http_client_request_hpp
+#define fibio_http_client_request_hpp
 
 #include <string>
 #include <boost/interprocess/streams/vectorstream.hpp>
 #include <fibio/http/common/request.hpp>
 #include <fibio/http/common/content_type.hpp>
 
-namespace fibio { namespace http { namespace client {
-    struct request : common::request {
+namespace fibio { namespace http {
+    struct client_request : common::request {
         void clear();
         
         size_t get_content_length() const;
@@ -32,10 +32,11 @@ namespace fibio { namespace http { namespace client {
             body_stream() << t;
         }
 
+        bool write_header(std::ostream &os);
         bool write(std::ostream &os);
 
         boost::interprocess::basic_ovectorstream<std::string> raw_body_stream_;
     };
-}}} // End of namespace fibio::http::client
+}}  // End of namespace fibio::http
 
 #endif

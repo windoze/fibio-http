@@ -3,11 +3,11 @@
 //  fibio
 //
 //  Created by Chen Xu on 14-3-10.
-//  Copyright (c) 2014年 0d0a.com. All rights reserved.
+//  Copyright (c) 2014 0d0a.com. All rights reserved.
 //
 
-#ifndef fiberized_io_http_common_common_types_hpp
-#define fiberized_io_http_common_common_types_hpp
+#ifndef fibio_http_common_common_types_hpp
+#define fibio_http_common_common_types_hpp
 
 #include <cstdint>
 #include <string>

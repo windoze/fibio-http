@@ -12,26 +12,26 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <fibio/http/client/client.hpp>
 
-namespace fibio { namespace http { namespace client {
+namespace fibio { namespace http {
     //////////////////////////////////////////////////////////////////////////////////////////
-    // request
+    // client_request
     //////////////////////////////////////////////////////////////////////////////////////////
     
-    void request::clear() {
+    void client_request::clear() {
         common::request::clear();
         std::string e;
         raw_body_stream_.swap_vector(e);
     }
     
-    std::ostream &request::body_stream() {
+    std::ostream &client_request::body_stream() {
         return raw_body_stream_;
     }
     
-    size_t request::get_content_length() const {
+    size_t client_request::get_content_length() const {
         return raw_body_stream_.vector().size();
     }
     
-    void request::accept_compressed(bool c) {
+    void client_request::accept_compressed(bool c) {
         if (c) {
             // Support gzip only for now
             common::header_map::iterator i=headers.find("Accept-Encoding");
@@ -45,30 +45,57 @@ namespace fibio { namespace http { namespace client {
         }
     }
     
-    bool request::write(std::ostream &os) {
-        if (!common::request::write(os)) return false;
+    bool client_request::write_header(std::ostream &os) {
+        std::string ka;
+        if (keep_alive) {
+            ka="keep-alive";
+        } else {
+            ka="close";
+        }
+        auto i=headers.find("connection");
+        if (i==headers.end()) {
+            headers.insert(std::make_pair("Connection", ka));
+        } else {
+            i->second.assign(ka);
+        }
+        if (!common::request::write_header(os)) return false;
+        return !os.eof() && !os.fail() && !os.bad();
+    }
+    
+    bool client_request::write(std::ostream &os) {
+        // Set "content-length"
+        auto i=headers.find("content-length");
+        if (i==headers.end()) {
+            headers.insert(std::make_pair("Content-Length", boost::lexical_cast<std::string>(get_content_length())));
+        } else {
+            i->second.assign(boost::lexical_cast<std::string>(get_content_length()));
+        }
+        // Write header
+        if (!write_header(os)) return false;
+        // Write body
         os.write(&(raw_body_stream_.vector()[0]), raw_body_stream_.vector().size());
+        os.flush();
         return !os.eof() && !os.fail() && !os.bad();
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////
-    // response
+    // client_response
     //////////////////////////////////////////////////////////////////////////////////////////
     
-    void response::clear() {
+    void client_response::clear() {
         drop_body();
         common::response::clear();
     }
     
-    void response::set_auto_decompression(bool c) {
+    void client_response::set_auto_decompression(bool c) {
         auto_decompress_=c;
     }
     
-    bool response::get_auto_decompression() const {
+    bool client_response::get_auto_decompression() const {
         return auto_decompress_;
     }
     
-    bool response::read(std::istream &is) {
+    bool client_response::read(std::istream &is) {
         clear();
         if (!common::response::read(is)) return false;
         
@@ -90,7 +117,7 @@ namespace fibio { namespace http { namespace client {
         return true;
     }
     
-    void response::drop_body() {
+    void client_response::drop_body() {
         // Discard body content iff body stream exists
         if (body_stream_) {
             while (!body_stream().eof()) {
@@ -109,14 +136,14 @@ namespace fibio { namespace http { namespace client {
     client::client(const std::string &server, const std::string &port) {
         boost::system::error_code ec=connect(server, port);
         if (ec) {
-            throw boost::system::system_error(ec, "HTTP client connect");
+            BOOST_THROW_EXCEPTION(boost::system::system_error(ec, "HTTP client connect"));
         }
     }
     
     client::client(const std::string &server, int port) {
         boost::system::error_code ec=connect(server, port);
         if (ec) {
-            throw boost::system::system_error(ec, "HTTP client connect");
+            BOOST_THROW_EXCEPTION(boost::system::system_error(ec, "HTTP client connect"));
         }
     }
 
@@ -151,6 +178,6 @@ namespace fibio { namespace http { namespace client {
         if(!req.write(stream_)) return false;
         if (!stream_.is_open() || stream_.eof() || stream_.fail() || stream_.bad()) return false;
         //if (!stream_.is_open()) return false;
-        return resp.read(stream_);
+        return resp.read(stream_) && (resp.status_code!=http_status_code::INVALID);
     }
-}}} // End of namespace fibio::http::client
+}}  // End of namespace fibio::http
