@@ -13,6 +13,7 @@
 #include <fibio/http/common/common_types.hpp>
 #include <fibio/http/common/request.hpp>
 #include <fibio/http/common/response.hpp>
+#include "url_parser.hpp"
 
 namespace fibio { namespace http { namespace common {
     namespace detail {
@@ -526,9 +527,62 @@ namespace fibio { namespace http { namespace common {
         headers.clear();
         content_length=0;
         keep_alive=false;
+        parsed_url=parsed_url_type();
     }
     
-    bool request::read(std::istream &is) {
+    bool request::parse_url(bool parse_path, bool parse_query) {
+        if (!(parsed_url.path.empty() && parsed_url.path_components.empty())) {
+            // Already parsed
+            return true;
+        }
+
+        http_parser_url p;
+        if(::http_parser_parse_url(url.c_str(),
+                                   url.length(),
+                                   method==http_method::CONNECT,
+                                   &p))
+            return false;
+        if (p.field_set & (1<<::UF_SCHEMA)) {
+            parsed_url.schema.assign(url.begin()+p.field_data[UF_SCHEMA].off,
+                                     url.begin()+p.field_data[UF_SCHEMA].off+p.field_data[UF_SCHEMA].len);
+        }
+        if (p.field_set & (1<<::UF_HOST)) {
+            parsed_url.host.assign(url.begin()+p.field_data[UF_HOST].off,
+                                     url.begin()+p.field_data[UF_HOST].off+p.field_data[UF_HOST].len);
+        }
+        if (p.field_set & (1<<::UF_PORT)) {
+            parsed_url.port=p.port;
+        }
+        if (p.field_set & (1<<::UF_PATH)) {
+            parsed_url.path.assign(url.begin()+p.field_data[UF_PATH].off,
+                                   url.begin()+p.field_data[UF_PATH].off+p.field_data[UF_PATH].len);
+            if(parse_path && !parse_path_components(parsed_url.path,
+                                                    parsed_url.path_components))
+                return false;
+        }
+        if (p.field_set & (1<<::UF_QUERY)) {
+            parsed_url.query.assign(url.begin()+p.field_data[UF_QUERY].off,
+                                    url.begin()+p.field_data[UF_QUERY].off+p.field_data[UF_QUERY].len);
+            if (parse_query && !parse_query_string(parsed_url.query,
+                                                   parsed_url.query_params))
+                    return false;
+        }
+        if (p.field_set & (1<<::UF_FRAGMENT)) {
+            parsed_url.fragment.assign(url.begin()+p.field_data[UF_FRAGMENT].off,
+                                       url.begin()+p.field_data[UF_FRAGMENT].off+p.field_data[UF_FRAGMENT].len);
+        }
+        if (p.field_set & (1<<::UF_USERINFO)) {
+            parsed_url.userinfo.assign(url.begin()+p.field_data[UF_USERINFO].off,
+                                       url.begin()+p.field_data[UF_USERINFO].off+p.field_data[UF_USERINFO].len);
+        }
+        return true;
+    }
+    
+    void request::compose_url() {
+        // TODO:
+    }
+    
+    bool request::read_header(std::istream &is) {
         detail::request_parser parser(*this);
         return parser.parse(is);
     }
@@ -576,7 +630,7 @@ namespace fibio { namespace http { namespace common {
         keep_alive=false;
     }
     
-    bool response::read(std::istream &is) {
+    bool response::read_header(std::istream &is) {
         detail::response_parser parser(*this);
         return parser.parse(is);
     }

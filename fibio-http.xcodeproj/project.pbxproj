@@ -38,6 +38,9 @@
 		2DB19F8418EB14150034B8E9 /* libboost_coroutine-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */; };
 		2DB19F8518EB14150034B8E9 /* libboost_iostreams-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */; };
 		2DB19F8618EB14150034B8E9 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5918EB13010034B8E9 /* libboost_system-mt.a */; };
+		2DC044E719EAB4460086C7A6 /* routing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DC044E519EAB4460086C7A6 /* routing.cpp */; };
+		2DC044EB19EB7D990086C7A6 /* url_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DC044E919EB7D990086C7A6 /* url_parser.cpp */; };
+		2DC044EC19EB7D990086C7A6 /* url_parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2DC044EA19EB7D990086C7A6 /* url_parser.hpp */; };
 		2DD8080419E90D1000670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
 		2DD8080519E90D3900670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
 		2DD8080619E90E1800670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
@@ -190,6 +193,10 @@
 		2DB19F6318EB13710034B8E9 /* test_http_client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_http_client; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB19F7718EB13EC0034B8E9 /* test_http_server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_http_server; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB19F9118EB15840034B8E9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		2DC044D919EAA5BD0086C7A6 /* routing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = routing.hpp; sourceTree = "<group>"; };
+		2DC044E519EAB4460086C7A6 /* routing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = routing.cpp; sourceTree = "<group>"; };
+		2DC044E919EB7D990086C7A6 /* url_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = url_parser.cpp; sourceTree = "<group>"; };
+		2DC044EA19EB7D990086C7A6 /* url_parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = url_parser.hpp; sourceTree = "<group>"; };
 		2DD8080319E90D1000670721 /* libfibio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfibio.dylib; path = "../../Library/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug/libfibio.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -370,6 +377,7 @@
 				2DB19E4118EB06720034B8E9 /* request.hpp */,
 				2DB19E4218EB06720034B8E9 /* response.hpp */,
 				2DB19E4318EB06720034B8E9 /* server.hpp */,
+				2DC044D919EAA5BD0086C7A6 /* routing.hpp */,
 			);
 			path = server;
 			sourceTree = "<group>";
@@ -380,6 +388,9 @@
 				2DB19E4518EB067D0034B8E9 /* client.cpp */,
 				2DB19E4618EB067D0034B8E9 /* common.cpp */,
 				2DB19E4718EB067D0034B8E9 /* server.cpp */,
+				2DC044E519EAB4460086C7A6 /* routing.cpp */,
+				2DC044EA19EB7D990086C7A6 /* url_parser.hpp */,
+				2DC044E919EB7D990086C7A6 /* url_parser.cpp */,
 			);
 			path = http;
 			sourceTree = "<group>";
@@ -416,6 +427,7 @@
 				2DB19E5A18EB076E0034B8E9 /* response.hpp in Headers */,
 				2DB19E5C18EB076E0034B8E9 /* response.hpp in Headers */,
 				2DB19E5618EB076E0034B8E9 /* request.hpp in Headers */,
+				2DC044EC19EB7D990086C7A6 /* url_parser.hpp in Headers */,
 				2DB19E5418EB076E0034B8E9 /* common_types.hpp in Headers */,
 				2DB19E5918EB076E0034B8E9 /* request.hpp in Headers */,
 				2DB19E5818EB076E0034B8E9 /* client.hpp in Headers */,
@@ -482,7 +494,7 @@
 		2DB19D6418EB04C40034B8E9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = 0d0a.com;
 			};
 			buildConfigurationList = 2DB19D6718EB04C40034B8E9 /* Build configuration list for PBXProject "fibio-http" */;
@@ -595,8 +607,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DC044EB19EB7D990086C7A6 /* url_parser.cpp in Sources */,
 				2DB19E6018EB076E0034B8E9 /* server.cpp in Sources */,
 				2DB19E5F18EB076E0034B8E9 /* common.cpp in Sources */,
+				2DC044E719EAB4460086C7A6 /* routing.cpp in Sources */,
 				2DB19E8118EB0C280034B8E9 /* http_parser.c in Sources */,
 				2DB19E5E18EB076E0034B8E9 /* client.cpp in Sources */,
 			);

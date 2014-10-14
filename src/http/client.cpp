@@ -97,7 +97,7 @@ namespace fibio { namespace http {
     
     bool client_response::read(std::istream &is) {
         clear();
-        if (!common::response::read(is)) return false;
+        if (!common::response::read_header(is)) return false;
         
         if (content_length>0) {
             // Setup body stream

@@ -15,7 +15,7 @@ namespace fibio { namespace http { namespace common {
     struct response {
         void clear();
         
-        bool read(std::istream &is);
+        bool read_header(std::istream &is);
         bool write_header(std::ostream &os);
         
         http_version version=http_version::INVALID;

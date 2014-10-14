@@ -29,7 +29,7 @@ namespace fibio { namespace http {
         typedef std::chrono::steady_clock::duration timeout_type;
         typedef fibio::http::server_request request;
         typedef fibio::http::server_response response;
-        typedef stream::tcp_stream connection;
+        typedef std::istream connection;
         typedef std::function<bool(request &req,
                                    response &resp,
                                    connection &conn)> request_handler_type;

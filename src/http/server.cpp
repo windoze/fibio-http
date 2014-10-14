@@ -107,7 +107,7 @@ namespace fibio { namespace http {
                           server::request_handler_type default_request_handler)
             : host_(host)
             , acceptor_(addr.c_str(), port)
-            , default_request_handler_(default_request_handler)
+            , default_request_handler_(std::move(default_request_handler))
             {}
 
             server_engine(unsigned short port, const std::string &host)
@@ -166,7 +166,11 @@ namespace fibio { namespace http {
                         break;
                     }
                     c.send(resp);
+                    // Make sure we consumed all parts of the request
+                    req.drop_body();
+                    // Make sure all data are received and sent
                     c.stream_.flush();
+                    // Keepalive counter
                     count++;
                 }
                 c.close();
@@ -224,7 +228,7 @@ namespace fibio { namespace http {
     
     bool server_request::read(std::istream &is) {
         clear();
-        if (!common::request::read(is)) return false;
+        if (!common::request::read_header(is)) return false;
         if (content_length>0) {
             // Setup body stream
             namespace bio = boost::iostreams;
