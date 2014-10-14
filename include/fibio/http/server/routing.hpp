@@ -13,6 +13,7 @@
 #include <functional>
 #include <boost/optional.hpp>
 #include <fibio/http/server/server.hpp>
+#include <fibio/http/common/string_pred.hpp>
 
 namespace fibio { namespace http {
     /**
@@ -39,17 +40,43 @@ namespace fibio { namespace http {
                                server::request &,
                                server::response &,
                                server::connection &)> routing_handler_type;
-    typedef std::pair<match_type, routing_handler_type> routing_rule_type;
-    typedef std::list<routing_rule_type> routing_table_type;
-    
+    typedef std::list<std::pair<match_type, routing_handler_type>> routing_table_type;
+ 
     /**
-     * Fallback handler, close connection unconditionally
+     * Stock response with specific status code, can be used with http server or routing table
      */
-    extern const server::request_handler_type fallback_handler;
-    
-    server::request_handler_type routing_table(const routing_table_type &table,
-                                               server::request_handler_type default_handler=fallback_handler);
+    struct stock_handler{
+        operator server::request_handler_type() const {
+            return [=](server::request &,
+                      server::response &resp,
+                      server::connection &) -> bool {
+                resp.status_code=m;
+                resp.keep_alive=false;
+                return true;
+            };
+        }
+        
+        operator routing_handler_type() const {
+            return [=](match_info &,
+                       server::request &,
+                       server::response &resp,
+                       server::connection &) -> bool {
+                resp.status_code=m;
+                resp.keep_alive=false;
+                return true;
+            };
+        }
+        
+        http_status_code m;
+    };
 
+    /**
+     * Routing table to handle requests
+     */
+    server::request_handler_type routing_table(const routing_table_type &table,
+                                               server::request_handler_type default_handler=stock_handler{http_status_code::NOT_FOUND});
+
+    
     /**
      * Match any request
      */
@@ -65,11 +92,32 @@ namespace fibio { namespace http {
      */
     match_type version_is(http_version v);
     
-    // Check a string attribute, like URL or header
-    typedef std::function<bool(const std::string &, match_info &)> string_match_type;
-    match_type url_(const string_match_type &);
-    match_type header_(const std::string &header, const string_match_type &);
+    /**
+     * Check URL against pred
+     * !see http/common/string_pred.hpp
+     */
+    template<typename Predicate>
+    match_type url_(Predicate pred) {
+        return [pred](server::request &req, match_info &)->bool {
+            return pred(req.url);
+        };
+    }
 
+    /**
+     * Check specific header against pred
+     * !see http/common/string_pred.hpp
+     */
+    template<typename Predicate>
+    match_type header_(const std::string &h, Predicate pred) {
+        return [h, pred](server::request &req, match_info &)->bool {
+            auto i=req.headers.find(h);
+            if (i==req.headers.end()) {
+                return false;
+            }
+            return pred(i->second);
+        };
+    }
+    
     // Match path pattern and extract parameters into match_info
     match_type path_match(const std::string &tmpl);
     

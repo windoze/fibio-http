@@ -81,13 +81,6 @@ namespace fibio { namespace http {
     
     const match_type any;
 
-    struct fallback_handler_type {
-        bool operator()(server::request &, server::response &, server::connection &) const
-        { return false; }
-    };
-    
-    const server::request_handler_type fallback_handler=fallback_handler_type();
-    
     match_type method_is(http_method m) {
         struct method_matcher {
             bool operator()(server::request &req, match_info &) const {
@@ -106,31 +99,6 @@ namespace fibio { namespace http {
             http_version version_;
         };
         return version_matcher{v};
-    }
-    
-    match_type url_(const string_match_type &m) {
-        struct url_matcher {
-            bool operator()(server::request &req, match_info &p) {
-                return m_(req.url, p);
-            }
-            string_match_type m_;
-        };
-        return url_matcher{m};
-    }
-    
-    match_type header_(const std::string &header, const string_match_type &m) {
-        struct header_matcher {
-            bool operator()(server::request &req, match_info &p) {
-                auto i=req.headers.find(header_);
-                if (i==req.headers.end()) {
-                    return false;
-                }
-                return m_(i->second, p);
-            }
-            std::string header_;
-            string_match_type m_;
-        };
-        return header_matcher{header, m};
     }
     
     match_type path_match(const std::string &tmpl) {
@@ -188,9 +156,13 @@ namespace fibio { namespace http {
     }
     
     match_type rest_resources(const std::string &path) {
-        match_type a=method_is(http_method::POST) && path_match(path);
+        // Collection operations
+        match_type a=(method_is(http_method::GET)
+                      || method_is(http_method::PUT)
+                      || method_is(http_method::POST)
+                      || method_is(http_method::DELETE)) && path_match(path);
+        // Item operations
         match_type b=(method_is(http_method::GET)
-                      || method_is(http_method::PATCH)
                       || method_is(http_method::PUT)
                       || method_is(http_method::DELETE)) && path_match(path+"/:id");
         return a || b;

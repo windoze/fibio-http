@@ -11,6 +11,7 @@
 #include <chrono>
 #include <sstream>
 #include <boost/asio/basic_waitable_timer.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <fibio/fiber.hpp>
 #include <fibio/fiberize.hpp>
 #include <fibio/http/client/client.hpp>
@@ -19,6 +20,7 @@
 
 using namespace fibio;
 using namespace fibio::http;
+using namespace fibio::http::common;
 
 void the_client() {
     client c;
@@ -122,14 +124,15 @@ int fibio::main(int argc, char *argv[]) {
     server svr(server::settings{"127.0.0.1",
         23456,
         routing_table(routing_table_type{
+            {url_(starts_with{"/"}), handler},
             {path_match("/")
                 || path_match("/index.html")
                 || path_match("/index.htm"), handler},
             {path_match("/test1/:id/test2"), handler},
             {path_match("/test2/*p") && method_is(http_method::POST), handler},
             {path_match("/test3/*"), handler},
-            {!method_is(http_method::GET), handler_400}
-        }, handler_404)
+            {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
+        }, stock_handler{http_status_code::NOT_FOUND})
     });
     svr.start();
     {

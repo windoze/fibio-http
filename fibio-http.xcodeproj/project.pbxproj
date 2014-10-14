@@ -41,6 +41,7 @@
 		2DC044E719EAB4460086C7A6 /* routing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DC044E519EAB4460086C7A6 /* routing.cpp */; };
 		2DC044EB19EB7D990086C7A6 /* url_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DC044E919EB7D990086C7A6 /* url_parser.cpp */; };
 		2DC044EC19EB7D990086C7A6 /* url_parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2DC044EA19EB7D990086C7A6 /* url_parser.hpp */; };
+		2DC044EF19ED62050086C7A6 /* string_pred.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2DC044EE19ED62050086C7A6 /* string_pred.hpp */; };
 		2DD8080419E90D1000670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
 		2DD8080519E90D3900670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
 		2DD8080619E90E1800670721 /* libfibio.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DD8080319E90D1000670721 /* libfibio.dylib */; };
@@ -197,6 +198,7 @@
 		2DC044E519EAB4460086C7A6 /* routing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = routing.cpp; sourceTree = "<group>"; };
 		2DC044E919EB7D990086C7A6 /* url_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = url_parser.cpp; sourceTree = "<group>"; };
 		2DC044EA19EB7D990086C7A6 /* url_parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = url_parser.hpp; sourceTree = "<group>"; };
+		2DC044EE19ED62050086C7A6 /* string_pred.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = string_pred.hpp; sourceTree = "<group>"; };
 		2DD8080319E90D1000670721 /* libfibio.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfibio.dylib; path = "../../Library/Developer/Xcode/DerivedData/fibio-http-gqmhyunxypwhxhduxowtygcjgbsa/Build/Products/Debug/libfibio.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -367,6 +369,7 @@
 				2DB19E3E18EB066A0034B8E9 /* content_type.hpp */,
 				2DB19E3F18EB066A0034B8E9 /* request.hpp */,
 				2DB19E4018EB066A0034B8E9 /* response.hpp */,
+				2DC044EE19ED62050086C7A6 /* string_pred.hpp */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 			files = (
 				2DB19E5518EB076E0034B8E9 /* content_type.hpp in Headers */,
 				2DB19E5718EB076E0034B8E9 /* response.hpp in Headers */,
+				2DC044EF19ED62050086C7A6 /* string_pred.hpp in Headers */,
 				2DB19E5B18EB076E0034B8E9 /* request.hpp in Headers */,
 				2DB19E5D18EB076E0034B8E9 /* server.hpp in Headers */,
 				2DB19E5A18EB076E0034B8E9 /* response.hpp in Headers */,
