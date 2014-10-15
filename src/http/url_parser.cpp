@@ -12,6 +12,7 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <iostream>
+#include <fibio/http/common/url_codec.hpp>
 #include "url_parser.hpp"
 
 namespace fibio { namespace http { namespace common {
@@ -27,12 +28,12 @@ namespace fibio { namespace http { namespace common {
         return (s.end()-s.begin()==2) && (*(s.begin())=='.') && (*(s.begin()+1)=='.');
     }
     
-    bool parse_path_components(const std::string &p, std::vector<std::string> &components) {
+    bool parse_path_components(const std::string &p, std::list<std::string> &components) {
         std::string path;
         path.reserve(p.length());
         url_decode(p.begin(), p.end(), std::back_insert_iterator<std::string>(path));
         //range_list r;
-        std::vector<std::string> r;
+        std::list<std::string> r;
         boost::split(r, path, boost::is_any_of("/"), boost::token_compress_on);
         
         for (auto &i : r) {

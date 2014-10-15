@@ -103,7 +103,7 @@ namespace fibio { namespace http {
     
     match_type path_match(const std::string &tmpl) {
         struct path_matcher {
-            typedef std::vector<std::string> components_type;
+            typedef std::list<std::string> components_type;
             typedef components_type::const_iterator component_iterator;
             
             bool operator()(server::request &req, match_info &m) {
@@ -146,12 +146,12 @@ namespace fibio { namespace http {
                 // Either pattern consumed or ended with a wildcard
                 return p==pattern.end() || (*p)[0]=='*';
             }
-            std::vector<std::string> pattern;
+            std::list<std::string> pattern;
             common::iequal eq;
         };
         path_matcher m;
         std::vector<std::string> c;
-        common::parse_path_components(tmpl,  m.pattern);
+        common::parse_path_components(tmpl, m.pattern);
         return std::move(m);
     }
     
