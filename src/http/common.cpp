@@ -529,7 +529,8 @@ namespace fibio { namespace http { namespace common {
         parsed_url=parsed_url_type();
     }
     
-    bool request::parse_url(bool parse_path, bool parse_query) {
+    bool parse_url(const std::string url, parsed_url_type &parsed_url, bool parse_path, bool parse_query)
+    {
         if (!(parsed_url.path.empty() && parsed_url.path_components.empty())) {
             // Already parsed
             return true;
@@ -538,9 +539,10 @@ namespace fibio { namespace http { namespace common {
         http_parser_url p;
         if(::http_parser_parse_url(url.c_str(),
                                    url.length(),
-                                   method==http_method::CONNECT,
+                                   false,
                                    &p))
             return false;
+        
         if (p.field_set & (1<<::UF_SCHEMA)) {
             parsed_url.schema.assign(url.begin()+p.field_data[UF_SCHEMA].off,
                                      url.begin()+p.field_data[UF_SCHEMA].off+p.field_data[UF_SCHEMA].len);
@@ -575,10 +577,6 @@ namespace fibio { namespace http { namespace common {
                                        url.begin()+p.field_data[UF_USERINFO].off+p.field_data[UF_USERINFO].len);
         }
         return true;
-    }
-    
-    void request::compose_url() {
-        // TODO:
     }
     
     bool request::read_header(std::istream &is) {

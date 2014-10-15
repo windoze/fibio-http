@@ -51,7 +51,7 @@ namespace fibio { namespace http {
                             server::response &resp,
                             server::connection &conn)
             {
-                req.parse_url();
+                parse_url(req.url, req.parsed_url);
                 match_info p;
                 for(auto &e : routing_table_) {
                     if(e.first(req, p)) {
@@ -107,7 +107,7 @@ namespace fibio { namespace http {
             typedef components_type::const_iterator component_iterator;
             
             bool operator()(server::request &req, match_info &m) {
-                req.parse_url();
+                parse_url(req.url, req.parsed_url);
                 component_iterator p=pattern.cbegin();
                 for (auto &i : req.parsed_url.path_components) {
                     if (i.empty()) {
