@@ -196,9 +196,32 @@ namespace fibio { namespace http {
         return resp.read(stream_) && (resp.status_code!=http_status_code::INVALID);
     }
 
+    client::request &make_request(client::request &req,
+                                  const std::string &url,
+                                  const common::header_map &hdr)
+    {
+        req.clear();
+        req.url=url;
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        req.headers.insert(hdr.begin(), hdr.end());
+        return req;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // url_client
     //////////////////////////////////////////////////////////////////////////////////////////
+    
+    client::response &url_client::request(const std::string &url,
+                                          const common::header_map &hdr)
+    {
+        if(prepare(url)) {
+            the_request_.method=http_method::GET;
+            the_client_->send_request(the_request_, the_response_);
+        }
+        return the_response_;
+    }
     
     bool url_client::prepare(const std::string &url, const common::header_map &hdr) {
         the_request_.clear();
