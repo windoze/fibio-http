@@ -51,7 +51,6 @@ namespace fibio { namespace http {
                       server::response &resp,
                       server::connection &) -> bool {
                 resp.status_code=m;
-                resp.keep_alive=false;
                 return true;
             };
         }
@@ -62,7 +61,6 @@ namespace fibio { namespace http {
                        server::response &resp,
                        server::connection &) -> bool {
                 resp.status_code=m;
-                resp.keep_alive=false;
                 return true;
             };
         }
