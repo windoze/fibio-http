@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <string>
 #include <map>
+#include <chrono>
 #include <fibio/http/common/content_type.hpp>
 
 namespace fibio { namespace http { namespace common {
@@ -120,12 +121,15 @@ namespace fibio { namespace http { namespace common {
     };
 
     typedef std::multimap<header_key_type, header_value_type, iless> header_map;
+    
+    typedef std::chrono::steady_clock::duration timeout_type;
 }}} // End of namespace fibio::http::common
 
 namespace fibio { namespace http {
     using common::http_version;
     using common::http_method;
     using common::http_status_code;
+    using common::timeout_type;
 }}  // End of namespace fibio::http
 
 

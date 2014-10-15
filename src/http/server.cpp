@@ -90,8 +90,8 @@ namespace fibio { namespace http {
             
             std::string host_;
             stream::tcp_stream stream_;
-            server::timeout_type read_timeout_=std::chrono::seconds(0);
-            server::timeout_type write_timeout_=std::chrono::seconds(0);
+            timeout_type read_timeout_=std::chrono::seconds(0);
+            timeout_type write_timeout_=std::chrono::seconds(0);
             std::unique_ptr<watchdog_timer_t> watchdog_timer_;
             std::unique_ptr<fiber> watchdog_fiber_;
         };
@@ -104,6 +104,7 @@ namespace fibio { namespace http {
             : host_(host)
             , acceptor_(addr.c_str(), port)
             , default_request_handler_(std::move(default_request_handler))
+            , active_connection_(0)
             {}
 
             server_engine(unsigned short port, const std::string &host)
@@ -132,6 +133,11 @@ namespace fibio { namespace http {
                 exit_signal_.set_value();
                 if(watchdog_)
                     watchdog_->join();
+                // Wait until all connections are closed
+                std::unique_lock<mutex> l(connection_counter_mtx_);
+                while(active_connection_) {
+                    connection_close_.wait(l);
+                }
             }
             
             boost::system::error_code accept(connection &sc) {
@@ -139,6 +145,7 @@ namespace fibio { namespace http {
                 acceptor_(sc.stream_, ec);
                 if (!ec) {
                     sc.host_=host_;
+                    active_connection_++;
                 }
                 return ec;
             }
@@ -173,6 +180,9 @@ namespace fibio { namespace http {
                     count++;
                 }
                 c.close();
+                
+                active_connection_--;
+                connection_close_.notify_one();
             }
             
             bool dispatch_vhost(request &req, response &resp, connection &c) {
@@ -195,8 +205,8 @@ namespace fibio { namespace http {
             tcp_stream_acceptor acceptor_;
             server::request_handler_type default_request_handler_;
             promise<void> exit_signal_;
-            server::timeout_type read_timeout_=std::chrono::seconds(0);
-            server::timeout_type write_timeout_=std::chrono::seconds(0);
+            timeout_type read_timeout_=std::chrono::seconds(0);
+            timeout_type write_timeout_=std::chrono::seconds(0);
             unsigned max_keep_alive_=DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION;
             
             // TODO: Use a more efficient data structure
@@ -205,6 +215,12 @@ namespace fibio { namespace http {
             vhost_map vhosts_;
             
             std::unique_ptr<fiber> watchdog_;
+            
+            // connection uses vhost info in server
+            // make sure server exists if there is living connection
+            std::atomic<uint32_t> active_connection_;
+            mutex connection_counter_mtx_;
+            condition_variable connection_close_;
         };
     }   // End of namespace detail
     

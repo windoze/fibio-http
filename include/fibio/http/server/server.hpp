@@ -12,7 +12,6 @@
 #include <memory>
 #include <string>
 #include <functional>
-#include <chrono>
 #include <system_error>
 #include <fibio/stream/iostream.hpp>
 #include <fibio/http/server/request.hpp>
@@ -26,7 +25,6 @@ namespace fibio { namespace http {
     constexpr unsigned DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION=100;
     
     struct server {
-        typedef std::chrono::steady_clock::duration timeout_type;
         typedef fibio::http::server_request request;
         typedef fibio::http::server_response response;
         typedef std::istream connection;
