@@ -90,6 +90,32 @@ void the_client() {
     assert(resp.status_code==http_status_code::OK);
 }
 
+void the_url_client() {
+    url_client c;
+    client::response &resp=c.request("http://127.0.0.1:23456/");
+    assert(resp.status_code==http_status_code::OK);
+    c.request("http://127.0.0.1:23456/index.html");
+    assert(resp.status_code==http_status_code::OK);
+    c.request("http://127.0.0.1:23456/index.htm");
+    assert(resp.status_code==http_status_code::OK);
+    c.request("http://127.0.0.1:23456/index.php");
+    assert(resp.status_code==http_status_code::NOT_FOUND);
+    c.request("http://127.0.0.1:23456/test1/123/test2");
+    assert(resp.status_code==http_status_code::OK);
+    c.request("http://127.0.0.1:23456/test1/123");
+    assert(resp.status_code==http_status_code::NOT_FOUND);
+    c.request("http://127.0.0.1:23456/test1/123/test2", "this is request body");
+    assert(resp.status_code==http_status_code::BAD_REQUEST);
+    c.request("http://127.0.0.1:23456/test2/123", "this is request body");
+    assert(resp.status_code==http_status_code::OK);
+    c.request("http://127.0.0.1:23456/test2/123/abc/xyz", "this is request body");
+    assert(resp.status_code==http_status_code::OK);
+    c.request("http://127.0.0.1:23456/test2/123");
+    assert(resp.status_code==http_status_code::NOT_FOUND);
+    c.request("http://127.0.0.1:23456/test3/with/a/long/and/stupid/url");
+    assert(resp.status_code==http_status_code::OK);
+}
+
 bool handler(match_info &mi, server::request &req, server::response &resp, server::connection &c) {
     resp.headers.insert({"Header1", "Value1"});
     // Write all headers back in a table
@@ -155,6 +181,7 @@ int fibio::main(int argc, char *argv[]) {
         size_t n=10;
         for (int i=0; i<n; i++) {
             fibers.create_fiber(the_client);
+            fibers.create_fiber(the_url_client);
         }
         fibers.join_all();
     }
