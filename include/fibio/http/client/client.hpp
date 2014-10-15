@@ -14,6 +14,7 @@
 #include <fibio/stream/iostream.hpp>
 #include <fibio/http/client/request.hpp>
 #include <fibio/http/client/response.hpp>
+#include <fibio/http/common/url_codec.hpp>
 
 namespace fibio { namespace http {
     struct client {
@@ -38,6 +39,40 @@ namespace fibio { namespace http {
         stream::tcp_stream stream_;
         bool auto_decompress_=false;
     };
+    
+    // GET
+    client::request &make_request(client::request &req,
+                      const std::string &url,
+                      const common::header_map &hdr=common::header_map())
+    {
+        req.clear();
+        req.url=url;
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        req.headers.insert(hdr.begin(), hdr.end());
+        return req;
+    }
+
+    // POST
+    template<typename T>
+    client::request &make_request(client::request &req,
+                      const std::string &url,
+                      const T &body,
+                      const common::header_map &hdr=common::header_map())
+    {
+        req.clear();
+        req.url=url;
+        req.method=http_method::POST;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        req.headers.insert(hdr.begin(), hdr.end());
+        // Default content type for HTML Forms
+        req.set_content_type("application/x-www-form-urlencoded");
+        // Write URL encoded body into body stream
+        url_encode(body, std::ostreambuf_iterator<char>(req.body_stream()));
+        return req;
+    }
 }}  // End of namespace fibio::http
 
 #endif

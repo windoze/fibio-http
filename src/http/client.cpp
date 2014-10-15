@@ -32,6 +32,18 @@ namespace fibio { namespace http {
         return raw_body_stream_.vector().size();
     }
     
+    void client_request::set_content_type(const std::string &ct) {
+        if (ct.empty()) {
+            return;
+        }
+        auto i=headers.find("Content-Type");
+        if (i==headers.end()) {
+            headers.insert({"Content-Type", ct});
+        } else {
+            i->second.assign(ct);
+        }
+    }
+    
     void client_request::accept_compressed(bool c) {
         if (c) {
             // Support gzip only for now
@@ -74,7 +86,9 @@ namespace fibio { namespace http {
         // Write header
         if (!write_header(os)) return false;
         // Write body
-        os.write(&(raw_body_stream_.vector()[0]), raw_body_stream_.vector().size());
+        if (!raw_body_stream_.vector().empty()) {
+            os.write(&(raw_body_stream_.vector()[0]), raw_body_stream_.vector().size());
+        }
         os.flush();
         return !os.eof() && !os.fail() && !os.bad();
     }

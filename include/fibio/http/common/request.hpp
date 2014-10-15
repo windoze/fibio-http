@@ -9,7 +9,7 @@
 #ifndef fibio_http_common_request_hpp
 #define fibio_http_common_request_hpp
 
-#include <vector>
+#include <list>
 #include <iostream>
 #include <fibio/http/common/common_types.hpp>
 
@@ -39,7 +39,7 @@ namespace fibio { namespace http { namespace common {
             std::string query;
             std::string fragment;
             std::string userinfo;
-            std::vector<std::string> path_components;
+            std::list<std::string> path_components;
             std::map<std::string, std::string> query_params;
         } parsed_url;
     };
