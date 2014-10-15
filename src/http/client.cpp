@@ -195,4 +195,57 @@ namespace fibio { namespace http {
         //if (!stream_.is_open()) return false;
         return resp.read(stream_) && (resp.status_code!=http_status_code::INVALID);
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // url_client
+    //////////////////////////////////////////////////////////////////////////////////////////
+    
+    bool url_client::prepare(const std::string &url, const common::header_map &hdr) {
+        the_request_.clear();
+        common::parsed_url_type purl;
+        if(!parse_url(url, purl, false, false))
+            return false;
+        // TODO: HTTPS
+        if(purl.port==0)
+            purl.port=80;
+        if(!make_client(purl.host, purl.port))
+            return false;
+        the_request_.url.reserve(url.length());
+        the_request_.url=purl.path;
+        if(!purl.query.empty()) {
+            the_request_.url+='?';
+            the_request_.url+=purl.query;
+        }
+        if(!purl.fragment.empty()) {
+            the_request_.url+='?';
+            the_request_.url+=purl.fragment;
+        }
+        the_request_.version=http_version::HTTP_1_1;
+        the_request_.keep_alive=true;
+        std::string host=the_client_->server_;
+        if(purl.port!=80) {
+            host+=':';
+            host+=boost::lexical_cast<std::string>(purl.port);
+        }
+        the_request_.headers.insert({"Host", std::move(host)});
+        the_request_.headers.insert(hdr.begin(), hdr.end());
+        return true;
+    }
+    
+    bool url_client::make_client(const std::string &host, uint16_t port) {
+        try {
+            if(the_client_) {
+                if ((the_client_->server_!=host) || (the_client_->port_!=boost::lexical_cast<std::string>(port))) {
+                    the_client_->disconnect();
+                    the_client_.reset(new client(host, port));
+                }
+            } else {
+                the_client_.reset(new client(host, port));
+            }
+            return true;
+        } catch(boost::system::system_error &e) {
+            return false;
+        }
+    }
+    
 }}  // End of namespace fibio::http

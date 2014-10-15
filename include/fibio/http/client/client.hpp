@@ -73,6 +73,41 @@ namespace fibio { namespace http {
         url_encode(body, std::ostreambuf_iterator<char>(req.body_stream()));
         return req;
     }
+    
+    struct url_client {
+        client::response &request(const std::string &url,
+                                  const common::header_map &hdr=common::header_map())
+        {
+            if(prepare(url)) {
+                the_request_.method=http_method::GET;
+                the_client_->send_request(the_request_, the_response_);
+            }
+            return the_response_;
+        }
+        
+        template<typename T>
+        client::response &request(const std::string &url,
+                                  const T &body,
+                                  const common::header_map &hdr=common::header_map())
+        {
+            if(prepare(url)) {
+                the_request_.method=http_method::POST;
+                // Default content type for HTML Forms
+                the_request_.set_content_type("application/x-www-form-urlencoded");
+                // Write URL encoded body into body stream
+                url_encode(body, std::ostreambuf_iterator<char>(the_request_.body_stream()));
+                the_client_->send_request(the_request_, the_response_);
+            }
+            return the_response_;
+        }
+        
+        bool prepare(const std::string &url, const common::header_map &hdr=common::header_map());
+        bool make_client(const std::string &host, uint16_t port);
+        
+        std::unique_ptr<client> the_client_;
+        client::request the_request_;
+        client::response the_response_;
+    };
 }}  // End of namespace fibio::http
 
 #endif
