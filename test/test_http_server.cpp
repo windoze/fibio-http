@@ -24,54 +24,150 @@ using namespace fibio::http::common;
 
 void the_client() {
     client c;
-    client::request req;
-    req.url="/";
-    // Default method
-    assert(req.method==http_method::INVALID);
-    req.method=http_method::GET;
-    // Default version
-    assert(req.version==http_version::INVALID);
-    req.version=http_version::HTTP_1_1;
-    assert(req.get_content_length()==0);
-    req.keep_alive=true;
-    std::string req_body("hello");
-    req.body_stream() << req_body;
-    
     if(c.connect("127.0.0.1", 23456)) {
         assert(false);
     }
     
-    for(int i=0; i<10; i++) {
-        client::response resp;
-        if(c.send_request(req, resp)) {
-            // This server returns a 200 response
-            assert(resp.status_code==http_status_code::OK);
-            assert(resp.status_message=="OK");
-            assert(resp.version==http_version::HTTP_1_1);
-            
-            size_t cl=resp.content_length;
-            std::string s;
-            std::stringstream ss;
-            ss << resp.body_stream().rdbuf();
-            s=ss.str();
-            assert(s.size()==cl);
-            // Make sure we triggered eof
-            resp.body_stream().peek();
-            assert(resp.body_stream().eof());
-        } else {
-            assert(false);
-        }
+    client::request req;
+    client::response resp;
+    {
+        //std::cout << "GET /" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::OK);
+        assert(resp.status_message=="OK");
+        assert(resp.version==http_version::HTTP_1_1);
+    }
+    {
+        //std::cout << "GET /index.html" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/index.html";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::OK);
+    }
+    {
+        //std::cout << "GET /index.htm" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/index.htm";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::OK);
+    }
+    {
+        //std::cout << "GET /index.php" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/index.php";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::NOT_FOUND);
+    }
+    {
+        //std::cout << "GET /test1/123/test2" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/test1/123/test2";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::OK);
+    }
+    {
+        //std::cout << "GET /test1/123" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/test1/123";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::NOT_FOUND);
+    }
+    {
+        //std::cout << "POST /test1/123/test2" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/test1/123/test2";
+        req.method=http_method::POST;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::BAD_REQUEST);
+    }
+    {
+        //std::cout << "POST /test2/123" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/test2/123";
+        req.method=http_method::POST;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::OK);
+    }
+    {
+        //std::cout << "POST /test2/123/abc/xyz" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/test2/123/abc/xyz";
+        req.method=http_method::POST;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::OK);
+    }
+    {
+        //std::cout << "GET /test2/123" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/test2/123";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::NOT_FOUND);
+    }
+    {
+        //std::cout << "GET /test3/with/a/long/and/stupid/url" << std::endl;
+        req.clear();
+        resp.clear();
+        req.url="/test3/with/a/long/and/stupid/url";
+        req.method=http_method::GET;
+        req.version=http_version::HTTP_1_1;
+        req.keep_alive=true;
+        bool ret=c.send_request(req, resp);
+        assert(ret);
+        assert(resp.status_code==http_status_code::OK);
     }
 }
 
-struct path_is {
-    bool operator()(const std::string &s, match_info &p) const {
-        return s==path_;
-    }
-    std::string path_;
-};
-
 bool handler(match_info &mi, server::request &req, server::response &resp, server::connection &c) {
+    resp.headers.insert({"Header1", "Value1"});
     // Write all headers back in a table
     resp.set_content_type("text/html");
     resp.body_stream() << "<HTML><HEAD><TITLE>Test</TITLE></HEAD><BODY>"<< std::endl;
@@ -106,29 +202,16 @@ bool handler(match_info &mi, server::request &req, server::response &resp, serve
     return true;
 }
 
-bool handler_404(server::request &req, server::response &resp, server::connection &c) {
-    resp.status_code=http_status_code::NOT_FOUND;
-    resp.keep_alive=false;
-    return true;
-}
-
-bool handler_400(match_info &, server::request &req, server::response &resp, server::connection &c) {
-    resp.status_code=http_status_code::BAD_REQUEST;
-    resp.keep_alive=false;
-    return true;
-}
-
 int fibio::main(int argc, char *argv[]) {
     scheduler::get_instance().add_worker_thread(3);
     
     server svr(server::settings{"127.0.0.1",
         23456,
         routing_table(routing_table_type{
-            {url_(starts_with{"/"}), handler},
             {path_match("/")
                 || path_match("/index.html")
                 || path_match("/index.htm"), handler},
-            {path_match("/test1/:id/test2"), handler},
+            {path_match("/test1/:id/test2") && method_is(http_method::GET), handler},
             {path_match("/test2/*p") && method_is(http_method::POST), handler},
             {path_match("/test3/*"), handler},
             {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
@@ -140,11 +223,11 @@ int fibio::main(int argc, char *argv[]) {
         fiber_group fibers;
         size_t n=10;
         for (int i=0; i<n; i++) {
-            //fibers.create_fiber(the_client);
+            fibers.create_fiber(the_client);
         }
         fibers.join_all();
     }
-    //svr.stop();
+    svr.stop();
     svr.join();
     std::cout << "main_fiber exiting" << std::endl;
     return 0;
