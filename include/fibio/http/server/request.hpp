@@ -42,6 +42,14 @@ namespace fibio { namespace http {
         v.read(is);
         return is;
     }
+
+    inline std::ostream &operator<<(std::ostream &os, server_request &req) {
+        req.write_header(os);
+        if(req.has_body())
+            os << req.body_stream().rdbuf();
+        os.flush();
+        return os;
+    }
 }}  // End of namespace fibio::http
 
 #endif

@@ -37,6 +37,14 @@ namespace fibio { namespace http {
 
         boost::interprocess::basic_ovectorstream<std::string> raw_body_stream_;
     };
+    
+    inline std::ostream &operator<<(std::ostream &os, client_request &req) {
+        req.write_header(os);
+        if(req.get_content_length()>0)
+            os << req.body_stream().rdbuf();
+        os.flush();
+        return os;
+    }
 }}  // End of namespace fibio::http
 
 #endif

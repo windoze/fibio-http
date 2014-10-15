@@ -46,6 +46,13 @@ namespace fibio { namespace http {
         return is;
     }
 
+    inline std::ostream &operator<<(std::ostream &os, client_response &resp) {
+        resp.write_header(os);
+        if(resp.has_body())
+            os << resp.body_stream().rdbuf();
+        os.flush();
+        return os;
+    }
 }}  // End of namespace fibio::http
 
 
