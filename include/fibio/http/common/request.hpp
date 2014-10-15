@@ -18,7 +18,7 @@ namespace fibio { namespace http { namespace common {
     struct parsed_url_type {
         std::string schema;
         std::string host;
-        uint16_t port;
+        uint16_t port=0;
         std::string path;
         std::string query;
         std::string fragment;
