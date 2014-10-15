@@ -498,7 +498,7 @@ namespace fibio { namespace http { namespace common {
                     return true;
                 }
                 nparsed=http_parser_execute(&parser_, &response::settings, buf, recved);
-                if (nparsed!=recved) {
+                if (state_==header_complete) {
                     // Parse error
                     if (nparsed>=0) {
                         // Move read pointer back to where parser consumed
@@ -506,9 +506,8 @@ namespace fibio { namespace http { namespace common {
                         off-=recved;
                         is.seekg(off, std::ios_base::cur);
                     }
-                    if (state_==header_complete) {
-                        return true;
-                    }
+                    return true;
+                } else if (nparsed!=recved) {
                     return false;
                 }
             }
