@@ -20,7 +20,8 @@ namespace fibio { namespace http {
     void client_request::clear() {
         common::request::clear();
         std::string e;
-        raw_body_stream_.swap_vector(e);
+        if (!raw_body_stream_.vector().empty())
+            raw_body_stream_.swap_vector(e);
     }
     
     std::ostream &client_request::body_stream() {

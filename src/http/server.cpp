@@ -259,7 +259,8 @@ namespace fibio { namespace http {
     void server_response::clear() {
         common::response::clear();
         std::string e;
-        raw_body_stream_.swap_vector(e);
+        if (!raw_body_stream_.vector().empty())
+            raw_body_stream_.swap_vector(e);
     }
     
     const std::string &server_response::get_body() const {
