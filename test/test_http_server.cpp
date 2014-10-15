@@ -215,7 +215,9 @@ int fibio::main(int argc, char *argv[]) {
             {path_match("/test2/*p") && method_is(http_method::POST), handler},
             {path_match("/test3/*"), handler},
             {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
-        }, stock_handler{http_status_code::NOT_FOUND})
+        }, stock_handler{http_status_code::NOT_FOUND}),
+        std::chrono::seconds(60),
+        std::chrono::seconds(60)
     });
     svr.start();
     {

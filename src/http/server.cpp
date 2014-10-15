@@ -24,14 +24,26 @@ namespace fibio { namespace http {
             connection()=default;
             connection(connection &&other)=default;
             connection(const connection &)=delete;
+            ~connection() {
+                close();
+            }
             
-            void watchdog_fiber(watchdog_timer_t &timer) {
+            void start_watchdog() {
+                watchdog_timer_.reset(new watchdog_timer_t(asio::get_io_service()));
+                watchdog_fiber_.reset(new fiber(fiber::attributes(fiber::attributes::stick_with_parent),
+                                                &connection::watchdog_fiber,
+                                                this));
+            }
+            
+            void watchdog_fiber() {
                 boost::system::error_code ignore_ec;
                 while (is_open()) {
-                    timer.async_wait(asio::yield[ignore_ec]);
+                    watchdog_timer_->async_wait(asio::yield[ignore_ec]);
                     // close the stream if timeout
-                    if (timer.expires_from_now() <= std::chrono::seconds(0)) {
-                        close();
+                    auto dur=watchdog_timer_->expires_from_now();
+                std::chrono::seconds s=std::chrono::duration_cast<std::chrono::seconds>(dur);
+                    if (s <= std::chrono::seconds(0)) {
+                        stream_.close();
                     }
                 }
             }
@@ -40,24 +52,10 @@ namespace fibio { namespace http {
                 bool ret=false;
                 if (!stream_.is_open() || stream_.eof() || stream_.fail() || stream_.bad()) return false;
                 if(read_timeout_>std::chrono::seconds(0)) {
-                    // Read with timeout
-                    watchdog_timer_t timer(asio::get_io_service());
-                    timer.expires_from_now(read_timeout_);
-                    fiber watchdog(fiber::attributes(fiber::attributes::stick_with_parent),
-                                   &connection::watchdog_fiber,
-                                   this,
-                                   std::ref(timer));
-                    ret=req.read(stream_);
-
-                    // Ask watchdog to exit
-                    timer.expires_from_now(std::chrono::seconds(0));
-                    timer.cancel();
-                    
-                    // Make sure watchdog has ended
-                    watchdog.join();
-                } else {
-                    ret=req.read(stream_);
+                    // Set read timeout
+                    watchdog_timer_->expires_from_now(read_timeout_);
                 }
+                ret=req.read(stream_);
                 return ret;
             }
             
@@ -65,24 +63,10 @@ namespace fibio { namespace http {
                 bool ret=false;
                 if (!stream_.is_open() || stream_.eof() || stream_.fail() || stream_.bad()) return false;
                 if(write_timeout_>std::chrono::seconds(0)) {
-                    // Write with timeout
-                    watchdog_timer_t timer(asio::get_io_service());
-                    timer.expires_from_now(write_timeout_);
-                    fiber watchdog(fiber::attributes(fiber::attributes::stick_with_parent),
-                                   &connection::watchdog_fiber,
-                                   this,
-                                   std::ref(timer));
-                    ret=resp.write(stream_);
-                    
-                    // Ask watchdog to exit
-                    timer.expires_from_now(std::chrono::seconds(0));
-                    timer.cancel();
-                    
-                    // Make sure watchdog has ended
-                    watchdog.join();
-                } else {
-                    ret=resp.write(stream_);
+                    // Set write timeout
+                    watchdog_timer_->expires_from_now(write_timeout_);
                 }
+                ret=resp.write(stream_);
                 if (!resp.keep_alive) {
                     stream_.close();
                     return false;
@@ -92,12 +76,24 @@ namespace fibio { namespace http {
             
             bool is_open() const { return stream_.is_open(); }
             
-            void close() { stream_.close(); }
+            void close() {
+                stream_.close();
+                if (watchdog_timer_) {
+                    watchdog_timer_->cancel();
+                }
+                if (watchdog_fiber_) {
+                    watchdog_fiber_->join();
+                    watchdog_fiber_.reset();
+                }
+                watchdog_timer_.reset();
+            }
             
             std::string host_;
             stream::tcp_stream stream_;
             server::timeout_type read_timeout_=std::chrono::seconds(0);
             server::timeout_type write_timeout_=std::chrono::seconds(0);
+            std::unique_ptr<watchdog_timer_t> watchdog_timer_;
+            std::unique_ptr<fiber> watchdog_fiber_;
         };
         
         struct server_engine {
@@ -153,6 +149,9 @@ namespace fibio { namespace http {
             }
             
             void servant(connection c) {
+                if (read_timeout_>std::chrono::seconds(0) || write_timeout_>std::chrono::seconds(0)) {
+                    c.start_watchdog();
+                }
                 request req;
                 int count=0;
                 while(c.recv(req)) {

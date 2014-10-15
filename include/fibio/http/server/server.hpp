@@ -47,7 +47,10 @@ namespace fibio { namespace http {
             , read_timeout(r)
             , write_timeout(w)
             , max_keep_alive(m)
-            {}
+            {
+                // read and write timeout must be set or unset at same time
+                assert(!((r==std::chrono::seconds(0)) ^ (w==std::chrono::seconds(0))));
+            }
                      
             std::string address;
             unsigned short port;
