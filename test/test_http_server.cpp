@@ -30,140 +30,64 @@ void the_client() {
     
     client::request req;
     client::response resp;
-    {
-        //std::cout << "GET /" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::OK);
-        assert(resp.status_message=="OK");
-        assert(resp.version==http_version::HTTP_1_1);
-    }
-    {
-        //std::cout << "GET /index.html" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/index.html";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::OK);
-    }
-    {
-        //std::cout << "GET /index.htm" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/index.htm";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::OK);
-    }
-    {
-        //std::cout << "GET /index.php" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/index.php";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::NOT_FOUND);
-    }
-    {
-        //std::cout << "GET /test1/123/test2" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/test1/123/test2";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::OK);
-    }
-    {
-        //std::cout << "GET /test1/123" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/test1/123";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::NOT_FOUND);
-    }
-    {
-        //std::cout << "POST /test1/123/test2" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/test1/123/test2";
-        req.method=http_method::POST;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::BAD_REQUEST);
-    }
-    {
-        //std::cout << "POST /test2/123" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/test2/123";
-        req.method=http_method::POST;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::OK);
-    }
-    {
-        //std::cout << "POST /test2/123/abc/xyz" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/test2/123/abc/xyz";
-        req.method=http_method::POST;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::OK);
-    }
-    {
-        //std::cout << "GET /test2/123" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/test2/123";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::NOT_FOUND);
-    }
-    {
-        //std::cout << "GET /test3/with/a/long/and/stupid/url" << std::endl;
-        req.clear();
-        resp.clear();
-        req.url="/test3/with/a/long/and/stupid/url";
-        req.method=http_method::GET;
-        req.version=http_version::HTTP_1_1;
-        req.keep_alive=true;
-        bool ret=c.send_request(req, resp);
-        assert(ret);
-        assert(resp.status_code==http_status_code::OK);
-    }
+    bool ret;
+    
+    //std::cout << "GET /" << std::endl;
+    ret=c.send_request(make_request(req, "/"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::OK);
+    assert(resp.status_message=="OK");
+    assert(resp.version==http_version::HTTP_1_1);
+    
+    //std::cout << "GET /index.html" << std::endl;
+    ret=c.send_request(make_request(req, "/index.html"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::OK);
+    
+    //std::cout << "GET /index.htm" << std::endl;
+    ret=c.send_request(make_request(req, "/index.htm"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::OK);
+    
+    //std::cout << "GET /index.php" << std::endl;
+    ret=c.send_request(make_request(req, "/index.php"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::NOT_FOUND);
+    
+    //std::cout << "GET /test1/123/test2" << std::endl;
+    ret=c.send_request(make_request(req, "/test1/123/test2"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::OK);
+    
+    //std::cout << "GET /test1/123" << std::endl;
+    ret=c.send_request(make_request(req, "/test1/123"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::NOT_FOUND);
+    
+    //std::cout << "POST /test1/123/test2" << std::endl;
+    ret=c.send_request(make_request(req, "/test1/123/test2", "this is request body"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::BAD_REQUEST);
+    
+    //std::cout << "POST /test2/123" << std::endl;
+    ret=c.send_request(make_request(req, "/test2/123", "this is request body"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::OK);
+    
+    //std::cout << "POST /test2/123/abc/xyz" << std::endl;
+    ret=c.send_request(make_request(req, "/test2/123/abc/xyz", "this is request body"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::OK);
+    
+    //std::cout << "GET /test2/123" << std::endl;
+    ret=c.send_request(make_request(req, "/test2/123"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::NOT_FOUND);
+    
+    //std::cout << "GET /test3/with/a/long/and/stupid/url" << std::endl;
+    ret=c.send_request(make_request(req, "/test3/with/a/long/and/stupid/url"), resp);
+    assert(ret);
+    assert(resp.status_code==http_status_code::OK);
 }
 
 bool handler(match_info &mi, server::request &req, server::response &resp, server::connection &c) {
@@ -172,6 +96,7 @@ bool handler(match_info &mi, server::request &req, server::response &resp, serve
     resp.set_content_type("text/html");
     resp.body_stream() << "<HTML><HEAD><TITLE>Test</TITLE></HEAD><BODY>"<< std::endl;
     resp.body_stream() << "<H1>Request Info</H1>" << std::endl;
+    
     resp.body_stream() << "<TABLE>" << std::endl;
     resp.body_stream() << "<TR><TD>URL</TD><TD>" << req.url << "</TD></TR>" << std::endl;
     resp.body_stream() << "<TR><TD>Schema</TD><TD>" << req.parsed_url.schema << "</TD></TR>" << std::endl;
@@ -180,24 +105,28 @@ bool handler(match_info &mi, server::request &req, server::response &resp, serve
     resp.body_stream() << "<TR><TD>Query</TD><TD>" << req.parsed_url.query << "</TD></TR>" << std::endl;
     resp.body_stream() << "<TR><TD>User Info</TD><TD>" << req.parsed_url.userinfo << "</TD></TR>" << std::endl;
     resp.body_stream() << "</TABLE>" << std::endl;
+    
     resp.body_stream() << "<H1>Headers</H1>" << std::endl;
     resp.body_stream() << "<TABLE>" << std::endl;
     for(auto &p: req.headers) {
         resp.body_stream() << "<TR><TD>" << p.first << "</TD><TD>" << p.second << "</TD></TR>" <<std::endl;
     }
     resp.body_stream() << "</TABLE>" << std::endl;
+    
     resp.body_stream() << "<H1>Parameters</H1>" << std::endl;
     resp.body_stream() << "<TABLE>" << std::endl;
     for(auto &p: mi) {
         resp.body_stream() << "<TR><TD>" << p.first << "</TD><TD>" << p.second << "</TD></TR>" <<std::endl;
     }
     resp.body_stream() << "</TABLE>" << std::endl;
+    
     resp.body_stream() << "<H1>Query</H1>" << std::endl;
     resp.body_stream() << "<TABLE>" << std::endl;
     for(auto &p: req.parsed_url.query_params) {
         resp.body_stream() << "<TR><TD>" << p.first << "</TD><TD>" << p.second << "</TD></TR>" <<std::endl;
     }
     resp.body_stream() << "</TABLE>" << std::endl;
+    
     resp.body_stream() << "</BODY></HTML>" << std::endl;
     return true;
 }
