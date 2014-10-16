@@ -34,6 +34,9 @@ namespace fibio { namespace http {
         // Consume and discard body
         void drop_body();
         
+        std::map<std::string, std::string> params;
+        
+    //private:
         std::unique_ptr<boost::iostreams::restriction<std::istream>> restriction_;
         std::unique_ptr<std::istream> body_stream_;
     };

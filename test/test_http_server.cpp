@@ -123,7 +123,7 @@ void the_url_client() {
     assert(resp.status_code==http_status_code::OK);
 }
 
-bool handler(match_info &mi, server::request &req, server::response &resp, server::connection &c) {
+bool handler(server::request &req, server::response &resp, server::connection &c) {
     resp.headers.insert({"Header1", "Value1"});
     // Write all headers back in a table
     resp.set_content_type("text/html");
@@ -148,7 +148,7 @@ bool handler(match_info &mi, server::request &req, server::response &resp, serve
     
     resp.body_stream() << "<H1>Parameters</H1>" << std::endl;
     resp.body_stream() << "<TABLE>" << std::endl;
-    for(auto &p: mi) {
+    for(auto &p: req.params) {
         resp.body_stream() << "<TR><TD>" << p.first << "</TD><TD>" << p.second << "</TD></TR>" <<std::endl;
     }
     resp.body_stream() << "</TABLE>" << std::endl;
@@ -175,9 +175,8 @@ int fibio::main(int argc, char *argv[]) {
                 || path_match("/index.htm"), handler},
             {path_match("/test1/:id/test2") && method_is(http_method::GET), handler},
             {path_match("/test2/*p") && method_is(http_method::POST), handler},
-            {path_match("/test3/*p"), subroute({
-                {param_("p", iends_with{".html"}), handler},
-            }, stock_handler{http_status_code::FORBIDDEN})},
+            {path_match("/test3/*p") && url_(iends_with{".html"}), handler},
+            {path_match("/test3/*"), stock_handler{http_status_code::FORBIDDEN}},
             {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
         }, stock_handler{http_status_code::NOT_FOUND}),
         std::chrono::seconds(60),

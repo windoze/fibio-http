@@ -12,8 +12,8 @@
 namespace fibio { namespace http {
     match_type operator&&(const match_type &lhs, const match_type &rhs) {
         struct matcher {
-            bool operator()(server::request &req, match_info &p) {
-                return lhs_(req, p) && rhs_(req, p);
+            bool operator()(server::request &req) {
+                return lhs_(req) && rhs_(req);
             }
             match_type lhs_;
             match_type rhs_;
@@ -24,8 +24,8 @@ namespace fibio { namespace http {
     
     match_type operator||(const match_type &lhs, const match_type &rhs) {
         struct matcher {
-            bool operator()(server::request &req, match_info &p) {
-                return lhs_(req, p) || rhs_(req,p);
+            bool operator()(server::request &req) {
+                return lhs_(req) || rhs_(req);
             }
             match_type lhs_;
             match_type rhs_;
@@ -36,7 +36,7 @@ namespace fibio { namespace http {
     
     match_type operator!(const match_type &m) {
         struct matcher {
-            bool operator()(server::request &req, match_info &p) { return !op_(req, p); }
+            bool operator()(server::request &req) { return !op_(req); }
             match_type op_;
         };
         
@@ -52,13 +52,9 @@ namespace fibio { namespace http {
                             server::connection &conn)
             {
                 parse_url(req.url, req.parsed_url);
-                match_info p;
                 for(auto &e : routing_table_) {
-                    if(e.first(req, p)) {
-                        return e.second(p, req, resp, conn);
-                    } else {
-                        // Clear parameters, in case some matcher accidentally wrote someting
-                        p.clear();
+                    if(e.first(req)) {
+                        return e.second(req, resp, conn);
                     }
                 }
                 return default_handler_(req, resp, conn);
@@ -71,26 +67,27 @@ namespace fibio { namespace http {
         return handler{table, default_handler};
     }
 
-    routing_handler_type subroute(const routing_table_type &table,
-                                  routing_handler_type default_handler)
+    server::request_handler_type subroute(const routing_table_type &table,
+                                          server::request_handler_type default_handler)
     {
         struct handler {
-            bool operator()(match_info &mi,
-                            server::request &req,
+            bool operator()(server::request &req,
                             server::response &resp,
                             server::connection &conn)
             {
                 parse_url(req.url, req.parsed_url);
                 for(auto &e : routing_table_) {
-                    if(e.first(req, mi)) {
-                        return e.second(mi, req, resp, conn);
+                    if(e.first(req)) {
+                        return e.second(req, resp, conn);
+                    } else {
+                        req.params.clear();
                     }
                 }
-                return default_handler_(mi, req, resp, conn);
+                return default_handler_(req, resp, conn);
             }
             
             routing_table_type routing_table_;
-            routing_handler_type default_handler_;
+            server::request_handler_type default_handler_;
         };
         
         return handler{table, default_handler};
@@ -98,7 +95,7 @@ namespace fibio { namespace http {
     
     match_type match_any() {
         struct matcher {
-            bool operator()(server::request &, match_info &) const
+            bool operator()(server::request &) const
             { return true; }
         };
         return matcher();
@@ -108,7 +105,7 @@ namespace fibio { namespace http {
 
     match_type method_is(http_method m) {
         struct matcher {
-            bool operator()(server::request &req, match_info &) const {
+            bool operator()(server::request &req) const {
                 return req.method==method_;
             }
             http_method method_;
@@ -118,7 +115,7 @@ namespace fibio { namespace http {
     
     match_type version_is(http_version v) {
         struct matcher {
-            bool operator()(server::request &req, match_info &) const {
+            bool operator()(server::request &req) const {
                 return req.version==version_;
             }
             http_version version_;
@@ -131,7 +128,8 @@ namespace fibio { namespace http {
             typedef std::list<std::string> components_type;
             typedef components_type::const_iterator component_iterator;
             
-            bool operator()(server::request &req, match_info &m) {
+            bool operator()(server::request &req) {
+                std::map<std::string, std::string> m;
                 parse_url(req.url, req.parsed_url);
                 component_iterator p=pattern.cbegin();
                 for (auto &i : req.parsed_url.path_components) {
@@ -169,7 +167,11 @@ namespace fibio { namespace http {
                     ++p;
                 }
                 // Either pattern consumed or ended with a wildcard
-                return p==pattern.end() || (*p)[0]=='*';
+                bool ret=(p==pattern.end() || (*p)[0]=='*');
+                if (ret) {
+                    std::move(m.begin(), m.end(), std::inserter(req.params, req.params.end()));
+                }
+                return ret;
             }
             std::list<std::string> pattern;
             common::iequal eq;
@@ -182,14 +184,12 @@ namespace fibio { namespace http {
     
     match_type rest_resources(const std::string &path) {
         // Collection operations
-        match_type a=(method_is(http_method::GET)
-                      || method_is(http_method::PUT)
-                      || method_is(http_method::POST)
-                      || method_is(http_method::DELETE)) && path_match(path);
+        match_type a=(method_is(http_method::GET)   // Index
+                      || method_is(http_method::POST)) && path_match(path);     // Create new item
         // Item operations
-        match_type b=(method_is(http_method::GET)
-                      || method_is(http_method::PUT)
-                      || method_is(http_method::DELETE)) && path_match(path+"/:id");
+        match_type b=(method_is(http_method::GET)   // Get item
+                      || method_is(http_method::PUT) || method_is(http_method::PATCH)   // Update item
+                      || method_is(http_method::DELETE)) && path_match(path+"/:id");    // Delete item
         return a || b;
     }
 }}  // End of namespace fibio::http

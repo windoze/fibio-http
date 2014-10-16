@@ -17,14 +17,9 @@
 
 namespace fibio { namespace http {
     /**
-     * Record matched parts
-     */
-    typedef std::map<std::string, std::string> match_info;
-    
-    /**
      * Check if request meets specific criteria
      */
-    typedef std::function<bool(server::request &, match_info &)> match_type;
+    typedef std::function<bool(server::request &)> match_type;
     
     /**
      * Match functor operators
@@ -36,33 +31,18 @@ namespace fibio { namespace http {
     /**
      * Routing table
      */
-    typedef std::function<bool(match_info &,
-                               server::request &,
-                               server::response &,
-                               server::connection &)> routing_handler_type;
-    typedef std::list<std::pair<match_type, routing_handler_type>> routing_table_type;
+    typedef std::list<std::pair<match_type, server::request_handler_type>> routing_table_type;
  
     /**
      * Stock response with specific status code, can be used with http server or routing table
      */
     struct stock_handler{
-        operator server::request_handler_type() const {
-            return [=](server::request &,
-                      server::response &resp,
-                      server::connection &) -> bool {
-                resp.status_code=m;
-                return true;
-            };
-        }
-        
-        operator routing_handler_type() const {
-            return [=](match_info &,
-                       server::request &,
-                       server::response &resp,
-                       server::connection &) -> bool {
-                resp.status_code=m;
-                return true;
-            };
+        bool operator()(server::request &,
+                        server::response &resp,
+                        server::connection &) const
+        {
+            resp.status_code=m;
+            return true;
         }
         
         http_status_code m;
@@ -73,13 +53,7 @@ namespace fibio { namespace http {
      */
     server::request_handler_type route(const routing_table_type &table,
                                        server::request_handler_type default_handler=stock_handler{http_status_code::NOT_FOUND});
-    
-    /**
-     * Sub routing table
-     */
-    routing_handler_type subroute(const routing_table_type &table,
-                                  routing_handler_type default_handler=stock_handler{http_status_code::NOT_FOUND});
-    
+
     /**
      * Match any request
      */
@@ -101,7 +75,7 @@ namespace fibio { namespace http {
      */
     template<typename Predicate>
     match_type url_(Predicate pred) {
-        return [pred](server::request &req, match_info &)->bool {
+        return [pred](server::request &req)->bool {
             return pred(req.url);
         };
     }
@@ -112,7 +86,7 @@ namespace fibio { namespace http {
      */
     template<typename Predicate>
     match_type header_(const std::string &h, Predicate pred) {
-        return [h, pred](server::request &req, match_info &)->bool {
+        return [h, pred](server::request &req)->bool {
             auto i=req.headers.find(h);
             if (i==req.headers.end()) {
                 return false;
@@ -127,9 +101,9 @@ namespace fibio { namespace http {
      */
     template<typename Predicate>
     match_type param_(const std::string &p, Predicate pred) {
-        return [p, pred](server::request &, match_info &mi)->bool {
-            auto i=mi.find(p);
-            if (i==mi.end()) {
+        return [p, pred](server::request &req)->bool {
+            auto i=req.params.find(p);
+            if (i==req.params.end()) {
                 return false;
             }
             return pred(i->second);
