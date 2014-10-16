@@ -11,7 +11,7 @@
 
 namespace fibio { namespace http {
     match_type operator&&(const match_type &lhs, const match_type &rhs) {
-        struct and_matcher {
+        struct matcher {
             bool operator()(server::request &req, match_info &p) {
                 return lhs_(req, p) && rhs_(req, p);
             }
@@ -19,11 +19,11 @@ namespace fibio { namespace http {
             match_type rhs_;
         };
         
-        return and_matcher{lhs, rhs};
+        return matcher{lhs, rhs};
     }
     
     match_type operator||(const match_type &lhs, const match_type &rhs) {
-        struct or_matcher {
+        struct matcher {
             bool operator()(server::request &req, match_info &p) {
                 return lhs_(req, p) || rhs_(req,p);
             }
@@ -31,22 +31,22 @@ namespace fibio { namespace http {
             match_type rhs_;
         };
         
-        return or_matcher{lhs, rhs};
+        return matcher{lhs, rhs};
     }
     
     match_type operator!(const match_type &m) {
-        struct not_matcher {
+        struct matcher {
             bool operator()(server::request &req, match_info &p) { return !op_(req, p); }
             match_type op_;
         };
         
-       return not_matcher{m};
+       return matcher{m};
     }
     
-    server::request_handler_type routing_table(const routing_table_type &table,
-                                               server::request_handler_type default_handler)
+    server::request_handler_type route(const routing_table_type &table,
+                                       server::request_handler_type default_handler)
     {
-        struct routing_table_handler {
+        struct handler {
             bool operator()(server::request &req,
                             server::response &resp,
                             server::connection &conn)
@@ -68,41 +68,66 @@ namespace fibio { namespace http {
             server::request_handler_type default_handler_;
         };
         
-        return routing_table_handler{table, default_handler};
+        return handler{table, default_handler};
     }
 
+    routing_handler_type subroute(const routing_table_type &table,
+                                  routing_handler_type default_handler)
+    {
+        struct handler {
+            bool operator()(match_info &mi,
+                            server::request &req,
+                            server::response &resp,
+                            server::connection &conn)
+            {
+                parse_url(req.url, req.parsed_url);
+                for(auto &e : routing_table_) {
+                    if(e.first(req, mi)) {
+                        return e.second(mi, req, resp, conn);
+                    }
+                }
+                return default_handler_(mi, req, resp, conn);
+            }
+            
+            routing_table_type routing_table_;
+            routing_handler_type default_handler_;
+        };
+        
+        return handler{table, default_handler};
+    }
+    
     match_type match_any() {
-        struct any_matcher {
+        struct matcher {
             bool operator()(server::request &, match_info &) const
             { return true; }
         };
-        return any_matcher();
+        return matcher();
     }
     
     const match_type any;
 
     match_type method_is(http_method m) {
-        struct method_matcher {
+        struct matcher {
             bool operator()(server::request &req, match_info &) const {
                 return req.method==method_;
             }
             http_method method_;
         };
-        return method_matcher{m};
+        return matcher{m};
     }
     
     match_type version_is(http_version v) {
-        struct version_matcher {
+        struct matcher {
             bool operator()(server::request &req, match_info &) const {
                 return req.version==version_;
             }
             http_version version_;
         };
-        return version_matcher{v};
+        return matcher{v};
     }
     
     match_type path_match(const std::string &tmpl) {
-        struct path_matcher {
+        struct matcher {
             typedef std::list<std::string> components_type;
             typedef components_type::const_iterator component_iterator;
             
@@ -149,7 +174,7 @@ namespace fibio { namespace http {
             std::list<std::string> pattern;
             common::iequal eq;
         };
-        path_matcher m;
+        matcher m;
         std::vector<std::string> c;
         common::parse_path_components(tmpl, m.pattern);
         return std::move(m);

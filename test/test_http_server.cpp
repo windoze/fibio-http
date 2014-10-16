@@ -87,6 +87,11 @@ void the_client() {
     //std::cout << "GET /test3/with/a/long/and/stupid/url" << std::endl;
     ret=c.send_request(make_request(req, "/test3/with/a/long/and/stupid/url"), resp);
     assert(ret);
+    assert(resp.status_code==http_status_code::FORBIDDEN);
+
+    //std::cout << "GET /test3/with/a/long/and/stupid/url" << std::endl;
+    ret=c.send_request(make_request(req, "/test3/with/a/long/and/stupid/url.html"), resp);
+    assert(ret);
     assert(resp.status_code==http_status_code::OK);
 }
 
@@ -113,6 +118,8 @@ void the_url_client() {
     c.request("http://127.0.0.1:23456/test2/123");
     assert(resp.status_code==http_status_code::NOT_FOUND);
     c.request("http://127.0.0.1:23456/test3/with/a/long/and/stupid/url");
+    assert(resp.status_code==http_status_code::FORBIDDEN);
+    c.request("http://127.0.0.1:23456/test3/with/a/long/and/stupid/url.html");
     assert(resp.status_code==http_status_code::OK);
 }
 
@@ -162,13 +169,15 @@ int fibio::main(int argc, char *argv[]) {
     
     server svr(server::settings{"127.0.0.1",
         23456,
-        routing_table(routing_table_type{
+        route({
             {path_match("/")
                 || path_match("/index.html")
                 || path_match("/index.htm"), handler},
             {path_match("/test1/:id/test2") && method_is(http_method::GET), handler},
             {path_match("/test2/*p") && method_is(http_method::POST), handler},
-            {path_match("/test3/*"), handler},
+            {path_match("/test3/*p"), subroute({
+                {param_("p", iends_with{".html"}), handler},
+            }, stock_handler{http_status_code::FORBIDDEN})},
             {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
         }, stock_handler{http_status_code::NOT_FOUND}),
         std::chrono::seconds(60),

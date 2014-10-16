@@ -71,9 +71,14 @@ namespace fibio { namespace http {
     /**
      * Routing table to handle requests
      */
-    server::request_handler_type routing_table(const routing_table_type &table,
-                                               server::request_handler_type default_handler=stock_handler{http_status_code::NOT_FOUND});
-
+    server::request_handler_type route(const routing_table_type &table,
+                                       server::request_handler_type default_handler=stock_handler{http_status_code::NOT_FOUND});
+    
+    /**
+     * Sub routing table
+     */
+    routing_handler_type subroute(const routing_table_type &table,
+                                  routing_handler_type default_handler=stock_handler{http_status_code::NOT_FOUND});
     
     /**
      * Match any request
@@ -110,6 +115,21 @@ namespace fibio { namespace http {
         return [h, pred](server::request &req, match_info &)->bool {
             auto i=req.headers.find(h);
             if (i==req.headers.end()) {
+                return false;
+            }
+            return pred(i->second);
+        };
+    }
+    
+    /**
+     * Check specific matched parameter against pred
+     * !see http/common/string_pred.hpp
+     */
+    template<typename Predicate>
+    match_type param_(const std::string &p, Predicate pred) {
+        return [p, pred](server::request &, match_info &mi)->bool {
+            auto i=mi.find(p);
+            if (i==mi.end()) {
                 return false;
             }
             return pred(i->second);
