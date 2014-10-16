@@ -170,13 +170,13 @@ int fibio::main(int argc, char *argv[]) {
     server svr(server::settings{"127.0.0.1",
         23456,
         route({
-            {path_match("/")
-                || path_match("/index.html")
-                || path_match("/index.htm"), handler},
+            {path_matches("/")
+                || path_matches("/index.html")
+                || path_matches("/index.htm"), handler},
             {GET("/test1/:id/test2"), handler},
             {POST("/test2/*p"), handler},
-            {path_match("/test3/*p") && url_(iends_with{".html"}), handler},
-            {path_match("/test3/*"), stock_handler{http_status_code::FORBIDDEN}},
+            {path_matches("/test3/*p") && url_(iends_with{".html"}), handler},
+            {path_matches("/test3/*"), stock_handler{http_status_code::FORBIDDEN}},
             {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
         }, stock_handler{http_status_code::NOT_FOUND}),
         std::chrono::seconds(60),
