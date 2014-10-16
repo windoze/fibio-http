@@ -193,15 +193,4 @@ namespace fibio { namespace http {
     match_type PUT(const std::string &pattern) {
         return method_is(http_method::PUT) && path_match(pattern);
     }
-    
-    match_type rest_resources(const std::string &path) {
-        // Collection operations
-        match_type a=(method_is(http_method::GET)   // Index
-                      || method_is(http_method::POST)) && path_match(path);     // Create new item
-        // Item operations
-        match_type b=(method_is(http_method::GET)   // Get item
-                      || method_is(http_method::PUT) || method_is(http_method::PATCH)   // Update item
-                      || method_is(http_method::DELETE)) && path_match(path+"/:id");    // Delete item
-        return a || b;
-    }
 }}  // End of namespace fibio::http

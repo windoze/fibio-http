@@ -117,9 +117,6 @@ namespace fibio { namespace http {
     match_type GET(const std::string &pattern);
     match_type POST(const std::string &pattern);
     match_type PUT(const std::string &pattern);
-    
-    // Match RESTful requests, may generate "id" parameter in match_info
-    match_type rest_resources(const std::string &path);
 }}  // End of namespace fibio::http
 
 #endif
