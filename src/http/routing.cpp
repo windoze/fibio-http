@@ -182,6 +182,18 @@ namespace fibio { namespace http {
         return std::move(m);
     }
     
+    match_type GET(const std::string &pattern) {
+        return method_is(http_method::GET) && path_match(pattern);
+    }
+    
+    match_type POST(const std::string &pattern) {
+        return method_is(http_method::POST) && path_match(pattern);
+    }
+    
+    match_type PUT(const std::string &pattern) {
+        return method_is(http_method::PUT) && path_match(pattern);
+    }
+    
     match_type rest_resources(const std::string &path) {
         // Collection operations
         match_type a=(method_is(http_method::GET)   // Index

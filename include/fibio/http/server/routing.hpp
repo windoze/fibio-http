@@ -32,7 +32,7 @@ namespace fibio { namespace http {
      * Routing table
      */
     typedef std::list<std::pair<match_type, server::request_handler_type>> routing_table_type;
- 
+    
     /**
      * Stock response with specific status code, can be used with http server or routing table
      */
@@ -112,6 +112,11 @@ namespace fibio { namespace http {
     
     // Match path pattern and extract parameters into match_info
     match_type path_match(const std::string &tmpl);
+    
+    // Convenience
+    match_type GET(const std::string &pattern);
+    match_type POST(const std::string &pattern);
+    match_type PUT(const std::string &pattern);
     
     // Match RESTful requests, may generate "id" parameter in match_info
     match_type rest_resources(const std::string &path);

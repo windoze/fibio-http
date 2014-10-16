@@ -173,8 +173,8 @@ int fibio::main(int argc, char *argv[]) {
             {path_match("/")
                 || path_match("/index.html")
                 || path_match("/index.htm"), handler},
-            {path_match("/test1/:id/test2") && method_is(http_method::GET), handler},
-            {path_match("/test2/*p") && method_is(http_method::POST), handler},
+            {GET("/test1/:id/test2"), handler},
+            {POST("/test2/*p"), handler},
             {path_match("/test3/*p") && url_(iends_with{".html"}), handler},
             {path_match("/test3/*"), stock_handler{http_status_code::FORBIDDEN}},
             {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
