@@ -63,12 +63,6 @@ namespace fibio { namespace http {
         void start();
         void stop();
         void join();
-        
-        void set_default_request_handler(request_handler_type &&handler);
-        void add_virtual_host(const std::string &vhost, request_handler_type &&handler);
-        void remove_virtual_host(const std::string &vhost);
-        void set_request_handler(const std::string &vhost, request_handler_type &&handler);
-        
     private:
         struct impl_deleter {
             void operator()(detail::server_engine *p);

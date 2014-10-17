@@ -168,7 +168,7 @@ namespace fibio { namespace http {
                     resp.version=req.version;
                     resp.keep_alive=req.keep_alive;
                     if(count>=max_keep_alive_) resp.keep_alive=false;
-                    if(!dispatch_vhost(req, resp, c)) {
+                    if(!default_request_handler_(req, resp, c.stream_)) {
                         break;
                     }
                     c.send(resp);
@@ -185,22 +185,6 @@ namespace fibio { namespace http {
                 connection_close_.notify_one();
             }
             
-            bool dispatch_vhost(request &req, response &resp, connection &c) {
-                if(req.method==http_method::INVALID)
-                    return false;
-                // Get "host" header
-                auto i=req.headers.find("host");
-                if(i!=req.headers.end()) {
-                    // Find virtual host
-                    // TODO: Host may be in host:port format, need to split
-                    auto j=vhosts_.find(i->second);
-                    if(j!=vhosts_.end()) {
-                        return j->second(req, resp, c.stream_);
-                    }
-                }
-                return default_request_handler_(req, resp, c.stream_);
-            }
-            
             std::string host_;
             tcp_stream_acceptor acceptor_;
             server::request_handler_type default_request_handler_;
@@ -208,11 +192,6 @@ namespace fibio { namespace http {
             timeout_type read_timeout_=std::chrono::seconds(0);
             timeout_type write_timeout_=std::chrono::seconds(0);
             unsigned max_keep_alive_=DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION;
-            
-            // TODO: Use a more efficient data structure
-            typedef std::map<std::string, server::request_handler_type, common::iless> vhost_map;
-            // TODO: Do we need a mutex here?
-            vhost_map vhosts_;
             
             std::unique_ptr<fiber> watchdog_;
             
@@ -373,25 +352,6 @@ namespace fibio { namespace http {
         if (servant_) {
             servant_->join();
             servant_.reset();
-        }
-    }
-    
-    void server::add_virtual_host(const std::string &vhost, request_handler_type &&handler) {
-        engine_->vhosts_[boost::to_lower_copy(vhost)]=std::move(handler);
-    }
-    
-    void server::remove_virtual_host(const std::string &vhost) {
-        engine_->vhosts_.erase(boost::to_lower_copy(vhost));
-    }
-    
-    void server::set_default_request_handler(request_handler_type &&handler) {
-        engine_->default_request_handler_=std::move(handler);
-    }
-    
-    void server::set_request_handler(const std::string &vhost, request_handler_type &&handler) {
-        auto i=engine_->vhosts_.find(vhost);
-        if (i!=engine_->vhosts_.end()) {
-            i->second=std::move(handler);
         }
     }
 }}  // End of namespace fibio::http
