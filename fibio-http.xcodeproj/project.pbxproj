@@ -38,6 +38,10 @@
 		2DB19F8418EB14150034B8E9 /* libboost_coroutine-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5818EB13010034B8E9 /* libboost_coroutine-mt.a */; };
 		2DB19F8518EB14150034B8E9 /* libboost_iostreams-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */; };
 		2DB19F8618EB14150034B8E9 /* libboost_system-mt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB19F5918EB13010034B8E9 /* libboost_system-mt.a */; };
+		2DBF804819F25FEA0058A4D3 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBF804719F25FEA0058A4D3 /* libcrypto.dylib */; };
+		2DBF805519F25FEE0058A4D3 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBF805419F25FEE0058A4D3 /* libssl.dylib */; };
+		2DBF805619F25FF70058A4D3 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBF804719F25FEA0058A4D3 /* libcrypto.dylib */; };
+		2DBF805719F25FFB0058A4D3 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBF805419F25FEE0058A4D3 /* libssl.dylib */; };
 		2DC044E719EAB4460086C7A6 /* routing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DC044E519EAB4460086C7A6 /* routing.cpp */; };
 		2DC044EB19EB7D990086C7A6 /* url_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DC044E919EB7D990086C7A6 /* url_parser.cpp */; };
 		2DC044EC19EB7D990086C7A6 /* url_parser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2DC044EA19EB7D990086C7A6 /* url_parser.hpp */; };
@@ -194,6 +198,8 @@
 		2DB19F6318EB13710034B8E9 /* test_http_client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_http_client; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB19F7718EB13EC0034B8E9 /* test_http_server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_http_server; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB19F9118EB15840034B8E9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		2DBF804719F25FEA0058A4D3 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+		2DBF805419F25FEE0058A4D3 /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		2DC044D919EAA5BD0086C7A6 /* routing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = routing.hpp; sourceTree = "<group>"; };
 		2DC044E519EAB4460086C7A6 /* routing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = routing.cpp; sourceTree = "<group>"; };
 		2DC044E919EB7D990086C7A6 /* url_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = url_parser.cpp; sourceTree = "<group>"; };
@@ -208,6 +214,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DBF805519F25FEE0058A4D3 /* libssl.dylib in Frameworks */,
+				2DBF804819F25FEA0058A4D3 /* libcrypto.dylib in Frameworks */,
 				2DD8080619E90E1800670721 /* libfibio.dylib in Frameworks */,
 				2DB19F5E18EB13120034B8E9 /* libboost_iostreams-mt.a in Frameworks */,
 				2DB19F5A18EB13010034B8E9 /* libboost_context-mt.a in Frameworks */,
@@ -234,6 +242,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DBF805719F25FFB0058A4D3 /* libssl.dylib in Frameworks */,
+				2DBF805619F25FF70058A4D3 /* libcrypto.dylib in Frameworks */,
 				2DB19F8318EB14150034B8E9 /* libboost_context-mt.a in Frameworks */,
 				2DB19F8418EB14150034B8E9 /* libboost_coroutine-mt.a in Frameworks */,
 				2DB19F8518EB14150034B8E9 /* libboost_iostreams-mt.a in Frameworks */,
@@ -249,6 +259,8 @@
 		2DB19D6318EB04C40034B8E9 = {
 			isa = PBXGroup;
 			children = (
+				2DBF805419F25FEE0058A4D3 /* libssl.dylib */,
+				2DBF804719F25FEA0058A4D3 /* libcrypto.dylib */,
 				2DD8080319E90D1000670721 /* libfibio.dylib */,
 				2DB19F5D18EB13120034B8E9 /* libboost_iostreams-mt.a */,
 				2DB19F5718EB13010034B8E9 /* libboost_context-mt.a */,

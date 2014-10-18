@@ -14,14 +14,11 @@
 #include <functional>
 #include <system_error>
 #include <fibio/stream/iostream.hpp>
+#include <fibio/stream/ssl.hpp>
 #include <fibio/http/server/request.hpp>
 #include <fibio/http/server/response.hpp>
 
 namespace fibio { namespace http {
-    namespace detail {
-        struct server_engine;
-    }
-    
     constexpr unsigned DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION=100;
     
     struct server {
@@ -33,9 +30,9 @@ namespace fibio { namespace http {
                                    connection &conn)> request_handler_type;
         
         struct settings {
-            settings(const std::string &a="0.0.0.0",
+            settings(request_handler_type h=[](request &, response &, connection &)->bool{ return false; },
+                     const std::string &a="0.0.0.0",
                      unsigned short p=80,
-                     request_handler_type h=[](request &, response &, connection &)->bool{ return false; },
                      timeout_type r=std::chrono::seconds(0),
                      timeout_type w=std::chrono::seconds(0),
                      unsigned m=DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION)
@@ -45,17 +42,38 @@ namespace fibio { namespace http {
             , read_timeout(r)
             , write_timeout(w)
             , max_keep_alive(m)
+            , ctx(0)
             {
                 // read and write timeout must be set or unset at same time
                 assert(!((r==std::chrono::seconds(0)) ^ (w==std::chrono::seconds(0))));
             }
                      
+            settings(ssl::context &context,
+                     request_handler_type h=[](request &, response &, connection &)->bool{ return false; },
+                     const std::string &a="0.0.0.0",
+                     unsigned short p=443,
+                     timeout_type r=std::chrono::seconds(0),
+                     timeout_type w=std::chrono::seconds(0),
+                     unsigned m=DEFAULT_KEEP_ALIVE_REQ_PER_CONNECTION)
+            : address(a)
+            , port(p)
+            , default_request_handler(h)
+            , read_timeout(r)
+            , write_timeout(w)
+            , max_keep_alive(m)
+            , ctx(&context)
+            {
+                // read and write timeout must be set or unset at same time
+                assert(!((r==std::chrono::seconds(0)) ^ (w==std::chrono::seconds(0))));
+            }
+
             std::string address;
             unsigned short port;
             request_handler_type default_request_handler;
             timeout_type read_timeout;
             timeout_type write_timeout;
             unsigned max_keep_alive;
+            ssl::context *ctx;
         };
 
         server(settings s);
@@ -63,12 +81,11 @@ namespace fibio { namespace http {
         void start();
         void stop();
         void join();
+        struct impl;
     private:
-        struct impl_deleter {
-            void operator()(detail::server_engine *p);
-        };
-        std::unique_ptr<detail::server_engine, impl_deleter> engine_;
+        impl *engine_;
         std::unique_ptr<fiber> servant_;
+        bool ssl_=false;
     };
 }}  // End of namespace fibio::http
 

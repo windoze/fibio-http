@@ -164,21 +164,19 @@ bool handler(server::request &req, server::response &resp, server::connection &c
     return true;
 }
 
-int fibio::main(int argc, char *argv[]) {
-    scheduler::get_instance().add_worker_thread(3);
-    
-    server svr(server::settings{"127.0.0.1",
+void http_server() {
+    server svr(server::settings{route({
+        {path_matches("/")
+            || path_matches("/index.html")
+            || path_matches("/index.htm"), handler},
+        {GET("/test1/:id/test2"), handler},
+        {POST("/test2/*p"), handler},
+        {path_matches("/test3/*p") && url_(iends_with{".html"}), handler},
+        {path_matches("/test3/*"), stock_handler{http_status_code::FORBIDDEN}},
+        {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
+    }, stock_handler{http_status_code::NOT_FOUND}),
+        "127.0.0.1",
         23456,
-        route({
-            {path_matches("/")
-                || path_matches("/index.html")
-                || path_matches("/index.htm"), handler},
-            {GET("/test1/:id/test2"), handler},
-            {POST("/test2/*p"), handler},
-            {path_matches("/test3/*p") && url_(iends_with{".html"}), handler},
-            {path_matches("/test3/*"), stock_handler{http_status_code::FORBIDDEN}},
-            {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
-        }, stock_handler{http_status_code::NOT_FOUND}),
         std::chrono::seconds(60),
         std::chrono::seconds(60)
     });
@@ -195,6 +193,48 @@ int fibio::main(int argc, char *argv[]) {
     }
     svr.stop();
     svr.join();
+}
+
+void https_server() {
+    boost::system::error_code ec;
+    ssl::context ctx(ssl::context::tlsv1_server);
+    ctx.set_options(ssl::context::default_workarounds
+                    | ssl::context::no_sslv2
+                    | ssl::context::single_dh_use);
+    ctx.set_password_callback([](std::size_t, ssl::context::password_purpose)->std::string{ return "test"; });
+    ctx.use_certificate_chain_file("server.pem", ec);
+    assert(!ec);
+    ctx.use_private_key_file("server.pem", ssl::context::pem, ec);
+    assert(!ec);
+    ctx.use_tmp_dh_file("dh512.pem", ec);
+    assert(!ec);
+    server svr(server::settings{ctx,
+        route({
+            {path_matches("/")
+                || path_matches("/index.html")
+                || path_matches("/index.htm"), handler},
+            {GET("/test1/:id/test2"), handler},
+            {POST("/test2/*p"), handler},
+            {path_matches("/test3/*p") && url_(iends_with{".html"}), handler},
+            {path_matches("/test3/*"), stock_handler{http_status_code::FORBIDDEN}},
+            {!method_is(http_method::GET), stock_handler{http_status_code::BAD_REQUEST}}
+        }, stock_handler{http_status_code::NOT_FOUND}),
+        "127.0.0.1",
+        23457,
+        std::chrono::seconds(60),
+        std::chrono::seconds(60)
+    });
+    svr.start();
+    //svr.stop();
+    svr.join();
+}
+
+int fibio::main(int argc, char *argv[]) {
+    scheduler::get_instance().add_worker_thread(3);
+    fiber_group fibers;
+    fibers.create_fiber(http_server);
+    fibers.create_fiber(https_server);
+    fibers.join_all();
     std::cout << "main_fiber exiting" << std::endl;
     return 0;
 }
