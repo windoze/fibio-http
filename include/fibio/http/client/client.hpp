@@ -12,6 +12,7 @@
 #include <string>
 #include <functional>
 #include <fibio/stream/iostream.hpp>
+#include <fibio/stream/ssl.hpp>
 #include <fibio/http/client/request.hpp>
 #include <fibio/http/client/response.hpp>
 #include <fibio/http/common/url_codec.hpp>
@@ -24,9 +25,14 @@ namespace fibio { namespace http {
         client()=default;
         client(const std::string &server, const std::string &port);
         client(const std::string &server, int port);
+        client(ssl::context &ctx, const std::string &server, const std::string &port);
+        client(ssl::context &ctx, const std::string &server, int port);
+        ~client();
         
         boost::system::error_code connect(const std::string &server, const std::string &port);
         boost::system::error_code connect(const std::string &server, int port);
+        boost::system::error_code connect(ssl::context &ctx, const std::string &server, const std::string &port);
+        boost::system::error_code connect(ssl::context &ctx, const std::string &server, int port);
         void disconnect();
         
         void set_auto_decompress(bool c);
@@ -36,7 +42,9 @@ namespace fibio { namespace http {
         
         std::string server_;
         std::string port_;
-        stream::tcp_stream stream_;
+        ssl::context *ctx_;
+        //stream::tcp_stream stream_;
+        stream::fiberized_iostream_base *stream_;
         bool auto_decompress_=false;
     };
     
@@ -87,11 +95,13 @@ namespace fibio { namespace http {
         
     private:
         bool prepare(const std::string &url, const common::header_map &hdr=common::header_map());
-        bool make_client(const std::string &host, uint16_t port);
+        bool make_client(bool ssl, const std::string &host, uint16_t port);
         
         std::unique_ptr<client> the_client_;
         client::request the_request_;
         client::response the_response_;
+        // Default ssl context
+        ssl::context ctx_=ssl::context(ssl::context::tlsv1_client);
     };
 }}  // End of namespace fibio::http
 

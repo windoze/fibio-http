@@ -162,18 +162,60 @@ namespace fibio { namespace http {
         }
     }
 
+    client::client(ssl::context &ctx, const std::string &server, const std::string &port)
+    : ctx_(&ctx)
+    {
+        boost::system::error_code ec=connect(ctx, server, port);
+        if (ec) {
+            BOOST_THROW_EXCEPTION(boost::system::system_error(ec, "HTTP client connect"));
+        }
+    }
+    
+    client::client(ssl::context &ctx, const std::string &server, int port)
+    : ctx_(&ctx)
+    {
+        boost::system::error_code ec=connect(ctx, server, port);
+        if (ec) {
+            BOOST_THROW_EXCEPTION(boost::system::system_error(ec, "HTTP client connect"));
+        }
+    }
+    
+    client::~client() {
+        if (stream_) {
+            if (ctx_) {
+                    delete static_cast<ssl::tcp_stream *>(stream_);
+            } else {
+                delete static_cast<tcp_stream *>(stream_);
+            }
+        }
+    }
+
     boost::system::error_code client::connect(const std::string &server, const std::string &port) {
         server_=server;
         port_=port;
-        return stream_.connect(server, port);
+        stream_=new tcp_stream();
+        return static_cast<tcp_stream *>(stream_)->connect(server, port);
     }
     
     boost::system::error_code client::connect(const std::string &server, int port) {
         return connect(server, boost::lexical_cast<std::string>(port));
     }
     
+    boost::system::error_code client::connect(ssl::context &ctx, const std::string &server, const std::string &port) {
+        server_=server;
+        port_=port;
+        stream_=new ssl::tcp_stream(ctx);
+        return static_cast<ssl::tcp_stream *>(stream_)->connect(server, port);
+    }
+    
+    boost::system::error_code client::connect(ssl::context &ctx, const std::string &server, int port) {
+        return connect(ctx, server, boost::lexical_cast<std::string>(port));
+    }
+    
     void client::disconnect() {
-        stream_.close();
+        if (stream_) {
+            stream_->close();
+        }
     }
     
     void client::set_auto_decompress(bool c) {
@@ -185,15 +227,15 @@ namespace fibio { namespace http {
     }
     
     bool client::send_request(request &req, response &resp) {
-        if (!stream_.is_open() || stream_.eof() || stream_.fail() || stream_.bad()) return false;
+        if (!stream_->is_open() || stream_->eof() || stream_->fail() || stream_->bad()) return false;
         // Make sure there is no pending data in the last response
         resp.clear();
         req.accept_compressed(auto_decompress_);
         resp.set_auto_decompression(auto_decompress_);
-        if(!req.write(stream_)) return false;
-        if (!stream_.is_open() || stream_.eof() || stream_.fail() || stream_.bad()) return false;
+        if(!req.write(*stream_)) return false;
+        if (!stream_->is_open() || stream_->eof() || stream_->fail() || stream_->bad()) return false;
         //if (!stream_.is_open()) return false;
-        return resp.read(stream_) && (resp.status_code!=http_status_code::INVALID);
+        return resp.read(*stream_) && (resp.status_code!=http_status_code::INVALID);
     }
 
     client::request &make_request(client::request &req,
@@ -229,10 +271,29 @@ namespace fibio { namespace http {
         if(!parse_url(url, purl, false, false))
             return false;
         // TODO: HTTPS
-        if(purl.port==0)
-            purl.port=80;
-        if(!make_client(purl.host, purl.port))
+        std::string host=purl.host;
+        if (common::iequal()(purl.schema, "http")) {
+            if(purl.port==0) {
+                purl.port=80;
+            } else {
+                host+=':';
+                host+=boost::lexical_cast<std::string>(purl.port);
+            }
+            if(!make_client(false, purl.host, purl.port))
+                return false;
+        } else if (common::iequal()(purl.schema, "https")) {
+            if(purl.port==0) {
+                purl.port=443;
+            } else {
+                host+=':';
+                host+=boost::lexical_cast<std::string>(purl.port);
+            }
+            if(!make_client(true, purl.host, purl.port))
+                return false;
+        } else {
+            // ERROR: Unknown protocol
             return false;
+        }
         the_request_.url.reserve(url.length());
         the_request_.url=purl.path;
         if(!purl.query.empty()) {
@@ -245,25 +306,28 @@ namespace fibio { namespace http {
         }
         the_request_.version=http_version::HTTP_1_1;
         the_request_.keep_alive=true;
-        std::string host=the_client_->server_;
-        if(purl.port!=80) {
-            host+=':';
-            host+=boost::lexical_cast<std::string>(purl.port);
-        }
         the_request_.headers.insert({"Host", std::move(host)});
         the_request_.headers.insert(hdr.begin(), hdr.end());
         return true;
     }
     
-    bool url_client::make_client(const std::string &host, uint16_t port) {
+    bool url_client::make_client(bool ssl, const std::string &host, uint16_t port) {
         try {
             if(the_client_) {
                 if ((the_client_->server_!=host) || (the_client_->port_!=boost::lexical_cast<std::string>(port))) {
                     the_client_->disconnect();
-                    the_client_.reset(new client(host, port));
+                    if (ssl) {
+                        the_client_.reset(new client(ctx_, host, port));
+                    } else {
+                        the_client_.reset(new client(host, port));
+                    }
                 }
             } else {
-                the_client_.reset(new client(host, port));
+                if (ssl) {
+                    the_client_.reset(new client(ctx_, host, port));
+                } else {
+                    the_client_.reset(new client(host, port));
+                }
             }
             return true;
         } catch(boost::system::system_error &e) {
