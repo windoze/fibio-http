@@ -7,6 +7,7 @@ TARGET_LINK_LIBRARIES(test_http_client fibio_http ${COMMON_LIBS} ${ZLIB_LIBRARIE
 
 add_executable(test_http_server test_http_server.cpp)
 TARGET_LINK_LIBRARIES(test_http_server fibio_http ${COMMON_LIBS} ${ZLIB_LIBRARIES})
+file(COPY "ca.pem" "dh512.pem" "server.pem" DESTINATION ${CMAKE_BINARY_DIR}/test)
 
 add_test(http_client test_http_client)
 add_test(http_server test_http_server)

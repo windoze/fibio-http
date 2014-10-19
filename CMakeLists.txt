@@ -7,6 +7,7 @@ if(APPLE)
 endif(APPLE)
 
 find_package(ZLIB REQUIRED)
+find_package(OpenSSL)
 find_package(fibio REQUIRED)
 find_package(Boost 1.56.0 COMPONENTS iostreams REQUIRED)
 
@@ -18,7 +19,7 @@ INCLUDE_DIRECTORIES(
 )
 
 set(COMMON_LIBS)
-list(APPEND COMMON_LIBS fibio_http ${Boost_LIBRARIES} ${FIBIO_LIBS})
+list(APPEND COMMON_LIBS fibio_http ${Boost_LIBRARIES} ${FIBIO_LIBS} ${OPENSSL_LIBRARIES})
 
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(test)

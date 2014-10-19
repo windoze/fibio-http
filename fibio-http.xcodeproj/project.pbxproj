@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2DACAA4E19F377DF004F6780 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBF804719F25FEA0058A4D3 /* libcrypto.dylib */; };
+		2DACAA5A19F377E4004F6780 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DBF805419F25FEE0058A4D3 /* libssl.dylib */; };
 		2DB19E5418EB076E0034B8E9 /* common_types.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2DB19E3D18EB066A0034B8E9 /* common_types.hpp */; };
 		2DB19E5518EB076E0034B8E9 /* content_type.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2DB19E3E18EB066A0034B8E9 /* content_type.hpp */; };
 		2DB19E5618EB076E0034B8E9 /* request.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2DB19E3F18EB066A0034B8E9 /* request.hpp */; };
@@ -229,6 +231,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DACAA5A19F377E4004F6780 /* libssl.dylib in Frameworks */,
+				2DACAA4E19F377DF004F6780 /* libcrypto.dylib in Frameworks */,
 				2DB19F6E18EB13B50034B8E9 /* libboost_context-mt.a in Frameworks */,
 				2DB19F6F18EB13B50034B8E9 /* libboost_coroutine-mt.a in Frameworks */,
 				2DB19F7018EB13B50034B8E9 /* libboost_iostreams-mt.a in Frameworks */,

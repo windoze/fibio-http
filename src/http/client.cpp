@@ -255,16 +255,6 @@ namespace fibio { namespace http {
     // url_client
     //////////////////////////////////////////////////////////////////////////////////////////
     
-    client::response &url_client::request(const std::string &url,
-                                          const common::header_map &hdr)
-    {
-        if(prepare(url)) {
-            the_request_.method=http_method::GET;
-            the_client_->send_request(the_request_, the_response_);
-        }
-        return the_response_;
-    }
-    
     bool url_client::prepare(const std::string &url, const common::header_map &hdr) {
         the_request_.clear();
         common::parsed_url_type purl;
@@ -311,20 +301,33 @@ namespace fibio { namespace http {
         return true;
     }
     
+    template<typename Port>
+    std::string host_name(bool ssl, const std::string &host, Port port) {
+        std::string ret=host;
+        if ((ssl && (port==443))
+            || (ssl && (port==443)))
+        {
+            ret += ':';
+            ret += boost::lexical_cast<std::string>(port);
+        }
+        return ret;
+    }
+    
     bool url_client::make_client(bool ssl, const std::string &host, uint16_t port) {
         try {
             if(the_client_) {
                 if ((the_client_->server_!=host) || (the_client_->port_!=boost::lexical_cast<std::string>(port))) {
+                    the_response_.drop_body();
                     the_client_->disconnect();
                     if (ssl) {
-                        the_client_.reset(new client(ctx_, host, port));
+                        the_client_.reset(new client(settings_.ctx, host, port));
                     } else {
                         the_client_.reset(new client(host, port));
                     }
                 }
             } else {
                 if (ssl) {
-                    the_client_.reset(new client(ctx_, host, port));
+                    the_client_.reset(new client(settings_.ctx, host, port));
                 } else {
                     the_client_.reset(new client(host, port));
                 }

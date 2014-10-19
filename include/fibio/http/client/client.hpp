@@ -74,13 +74,42 @@ namespace fibio { namespace http {
     }
     
     struct url_client {
-        client::response &request(const std::string &url,
-                                  const common::header_map &hdr=common::header_map());
+        struct settings {
+            ssl::context ctx=ssl::context(ssl::context::tlsv1_client);
+            int max_redirection=0;
+        };
+        
+        url_client()=default;
+        
+        url_client(settings &&s)
+        : settings_(std::move(s))
+        {}
+        
+        inline client::response &request(const std::string &url,
+                                         const common::header_map &hdr=common::header_map(),
+                                         unsigned max_redirection=50)
+        {
+            if(prepare(url)) {
+                the_request_.method=http_method::GET;
+                if (!hdr.empty()) the_request_.headers.insert(hdr.begin(), hdr.end());
+                the_client_->send_request(the_request_, the_response_);
+            }
+            if (max_redirection>0) {
+                auto i=the_response_.headers.find("location");
+                if (static_cast<uint16_t>(the_response_.status_code) / 100 == 3
+                    && i != the_response_.headers.end()) {
+                    // 3xx redirect with "Location" header
+                    return request(i->second, hdr, max_redirection-1);
+                }
+            }
+            return the_response_;
+        }
         
         template<typename T>
         client::response &request(const std::string &url,
                                   const T &body,
-                                  const common::header_map &hdr=common::header_map())
+                                  const common::header_map &hdr=common::header_map(),
+                                  unsigned max_redirection=std::numeric_limits<unsigned>::max())
         {
             if(prepare(url)) {
                 the_request_.method=http_method::POST;
@@ -88,7 +117,22 @@ namespace fibio { namespace http {
                 the_request_.set_content_type("application/x-www-form-urlencoded");
                 // Write URL encoded body into body stream
                 url_encode(body, std::ostreambuf_iterator<char>(the_request_.body_stream()));
+                if (!hdr.empty()) the_request_.headers.insert(hdr.begin(), hdr.end());
                 the_client_->send_request(the_request_, the_response_);
+                auto i=the_response_.headers.find("location");
+                if (max_redirection>0) {
+                    if (static_cast<uint16_t>(the_response_.status_code) / 100 == 3
+                        && i != the_response_.headers.end()) {
+                        // 3xx redirect with "Location" header
+                        if (the_response_.status_code==http_status_code::TEMPORARY_REDIRECT) {
+                            // 307 needs to resend request with original method
+                            return request(i->second, body, hdr, max_redirection-1);
+                        } else {
+                            // Other 3xx uses "POST-Redirection-GET"
+                            return request(i->second, hdr, max_redirection-1);
+                        }
+                    }
+                }
             }
             return the_response_;
         }
@@ -101,7 +145,7 @@ namespace fibio { namespace http {
         client::request the_request_;
         client::response the_response_;
         // Default ssl context
-        ssl::context ctx_=ssl::context(ssl::context::tlsv1_client);
+        settings settings_;
     };
 }}  // End of namespace fibio::http
 

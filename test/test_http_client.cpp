@@ -65,12 +65,17 @@ void the_url_client() {
         client::response &resp=uc.request("http://www.baidu.com/");
         assert(resp.status_code==http_status_code::OK);
     }
+    {
+        // http://github.com/ responses with 301, redirects to 'https://github.com/'
+        client::response &resp=uc.request("http://github.com/");
+        assert(resp.status_code==http_status_code::OK);
+    }
 }
 
 int fibio::main(int argc, char *argv[]) {
     fiber_group fibers;
-    for (int i=0; i<10; i++) {
-        fibers.create_fiber(the_client);
+    for (int i=0; i<1; i++) {
+        //fibers.create_fiber(the_client);
         fibers.create_fiber(the_url_client);
     }
     fibers.join_all();
